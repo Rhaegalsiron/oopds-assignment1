@@ -1,0 +1,92 @@
+@startuml
+!theme blueprint
+class Game {
+  Unit[] player1Units
+  Unit[] player2Units
+  Battlefield map
+  update()
+}
+class Unit {
+  GenericBot defaultBot
+  MoveBot moveBot
+  ActionBot actionBot
+  SeeingBot seeingBot
+  int posX
+  int posY
+  int shotsRemaining
+  move(x,y)
+  fire(x,y)
+  look(x,y)
+}
+class Grid {
+  Unit? occupyingUnit
+  operator>>(grid1, grid2)
+}
+class Battlefield
+{
+  vector<vector<Grid>> map
+  Optional[Grid] getGrid(x, y)
+}
+class GenericBot {
+  move(x,y)
+  fire(x,y)
+  look(x,y)
+}
+abstract MoveBot {
+  moveSpecial(x,y)
+}
+abstract ActionBot{
+  fireSpecial(x,y)
+}
+abstract SeeingBot{
+  lookSpecial(x,y)
+}
+class JumpBot {
+  moveSpecial(x,y)
+}
+class StealthBot {
+  moveSpecial(x,y)
+}
+class ThirtyShotBot{
+  fireSpecial(x,y)
+}
+class LongShotBot{
+  fireSpecial(x,y)
+}
+class ShotgunBot{
+  fireSprecial(x,y)
+}
+class TrackerBot{
+  lookSpecial(x,y)
+}
+class MapVisionBot{
+  lookSpecial(x,y)
+}
+
+Game <-- Unit
+Game <-- Battlefield
+
+GenericBot <|-- MoveBot
+GenericBot <|-- ActionBot
+GenericBot <|-- SeeingBot
+
+MoveBot <|.. JumpBot
+MoveBot <|.. StealthBot
+
+ActionBot <|.. ThirtyShotBot
+ActionBot <|.. LongShotBot
+ActionBot <|.. ShotgunBot
+
+SeeingBot <|.. TrackerBot
+SeeingBot <|.. MapVisionBot
+
+Unit *-- GenericBot
+Unit o-- JumpBot
+Unit o-- StealthBot
+Unit o-- ThirtyShotBot
+Unit o-- ShotgunBot
+Unit o-- TrackerBot
+Unit o-- MapVisionBot
+
+Battlefield *-- Grid
+@enduml
