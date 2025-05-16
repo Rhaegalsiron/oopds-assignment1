@@ -1,10 +1,13 @@
 #include "Unit.h"
-#include "BattleField.h"
 #include "Directions.h"
+#include "Evolutions.h"
 
-Unit::Unit(Battlefield field)
+Unit::Unit(AbstractGame *game, string name, int initialX, int initialY)
 {
-    this->field = field;
+    this->Name = name;
+    this->updatePos(initialX, initialY);
+    this->game = game;
+    this->field = this->game->field;
 }
 
 void Unit::move(int direction)
@@ -45,15 +48,40 @@ void Unit::move(int direction)
     }
 
     // TODO: COMPLETE HANDLING OF MOVEMENT
-    this->field.isPosValid(newPosX, newPosY);
+    this->field->isPosValid(newPosX, newPosY);
 };
+
+void Unit::move(int x, int y)
+{
+    int newPosY = this->posY;
+    int newPosX = this->posX; 
+    if (newPosX > 0){
+        newPosX = 1;
+    }
+    else if (newPosX < 0){
+        newPosX = -1;
+    }
+    if (newPosY > 0){
+        newPosY = 1;
+    }
+    else if (newPosY < 0){
+        newPosY = -1;
+    }
+    
+
+};
+
 void Unit::fire(int x, int y)
 {
-    Grid *targetGrid = this->field.getGrid(x, y);
+    Grid *targetGrid = this->field->getGrid(x, y);
     if (targetGrid->occupyingUnit != NULL)
     {
-        targetGrid->occupyingUnit->destroy();
-        this->evolve();
+        bool successfulHit = rand() % 100 <= 30;
+        if (successfulHit)
+        {
+            targetGrid->occupyingUnit->destroy();
+            this->evolve();
+        }
         return;
     }
     cout << "No hit" << endl;
@@ -66,7 +94,18 @@ void Unit::evolve()
 {
     cout << "Evolving" << endl;
 };
+
 void Unit::destroy()
 {
-    cout << "destoyed" << endl;
+    Grid *grid = this->field->getGrid(this->posX, this->posY);
+    grid->occupyingUnit = NULL;
+    this->posX = -1;
+    this->posY = -1;
+    this->game->addToRespawn(this);
+};
+
+void Unit::updatePos(int x, int y)
+{
+    this->posX = x;
+    this->posY = y;
 };

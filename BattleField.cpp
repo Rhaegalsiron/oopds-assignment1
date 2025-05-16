@@ -9,7 +9,6 @@ void Battlefield::generateMap(int sizeX, int sizeY)
         {
             this->map[y][x] = new Grid;
         }
-        cout << endl;
     }
 };
 

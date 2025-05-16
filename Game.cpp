@@ -1,0 +1,30 @@
+#include "Game.h"
+
+Game::Game()
+{
+    this->field = new Battlefield();
+};
+
+void Game::addToRespawn(Unit *unit)
+{
+    this->respawnQueue.insert(this->respawnQueue.begin(), unit);
+};
+
+void Game::respawnNext()
+{
+    Unit *unit = this->respawnQueue.back();
+    while (true)
+    {
+        int randX = rand() % this->field->map[0].size();
+        int randY = rand() % this->field->map.size();
+        Grid *grid = this->field->getGrid(randX, randY);
+
+        if (grid->occupyingUnit == NULL)
+        {
+            grid->occupyingUnit = unit;
+            unit->updatePos(randX, randY);
+            this->respawnQueue.pop_back();
+            break;
+        }
+    }
+};

@@ -3,22 +3,13 @@
 #include <vector>
 #include <string>
 #include "Unit.h"
+#include "tests.h"
 using namespace std;
 
 int main()
 {
-
-    int width = 10, height = 10;
-    Battlefield battlefield1;
-    battlefield1.generateMap(width, height);
-
-    Grid *grid = battlefield1.getGrid(0, 0);
-    grid->occupyingUnit = new Unit(battlefield1);
-    Unit *tUnit = grid->occupyingUnit;
-    grid = battlefield1.getGrid(0,1);
-    grid->occupyingUnit = new Unit(battlefield1);
-    battlefield1.displayMap();
-    tUnit->fire(0,1);
-
+    cout << "Battlefield test " << (test_battlefield() ? "passed" : "failed") << endl;
+    cout << "fire test " << (test_fire() ? "passed" : "failed") << endl;
+    cout << "respawn test" << (test_respawn() ? "passed":"failed")<< endl;
     return 0;
 }

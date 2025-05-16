@@ -1,8 +1,12 @@
 @startuml
 !theme blueprint
+abstract AbstractGame {
+  Unit[] respawnQueue
+  Battlefield map
+  update()
+}
 class Game {
-  Unit[] player1Units
-  Unit[] player2Units
+  Unit[] respawnQueue
   Battlefield map
   update()
 }
@@ -53,7 +57,7 @@ class ThirtyShotBot{
 class LongShotBot{
   fireSpecial(x,y)
 }
-class ShotgunBot{
+class SemiAutoBot{
   fireSprecial(x,y)
 }
 class TrackerBot{
@@ -63,8 +67,12 @@ class MapVisionBot{
   lookSpecial(x,y)
 }
 
-Game <-- Unit
-Game <-- Battlefield
+AbstractGame <|.. Game
+Game o-- Unit
+Unit *-- AbstractGame
+Game *-- Battlefield
+Battlefield *-- Grid
+Grid o-- Unit
 
 GenericBot <|-- MoveBot
 GenericBot <|-- ActionBot
@@ -75,7 +83,7 @@ MoveBot <|.. StealthBot
 
 ActionBot <|.. ThirtyShotBot
 ActionBot <|.. LongShotBot
-ActionBot <|.. ShotgunBot
+ActionBot <|.. SemiAutoBot
 
 SeeingBot <|.. TrackerBot
 SeeingBot <|.. MapVisionBot
@@ -84,9 +92,7 @@ Unit *-- GenericBot
 Unit o-- JumpBot
 Unit o-- StealthBot
 Unit o-- ThirtyShotBot
-Unit o-- ShotgunBot
+Unit o-- SemiAutoBot
 Unit o-- TrackerBot
 Unit o-- MapVisionBot
-
-Battlefield *-- Grid
 @enduml
