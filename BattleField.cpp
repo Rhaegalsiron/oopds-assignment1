@@ -1,5 +1,9 @@
 #include "BattleField.h"
 
+Grid::Grid() {
+    this->occupyingUnit = NULL;
+}
+
 void Battlefield::generateMap(int sizeX, int sizeY)
 {
     map.resize(sizeY, vector<Grid *>(sizeX, NULL));

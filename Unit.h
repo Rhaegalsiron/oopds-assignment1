@@ -3,20 +3,20 @@
 #include <string>
 #include "BattleField.h"
 #include "AbstractGame.h"
+#include "AbstractRobot.h"
 using namespace std;
 
 class Unit
 {
 
 private:
-    
     Battlefield *field;
     AbstractGame *game;
-    vector<string> movementEvolutionOptions = {"JumpBot","StealthBot"};
-    vector<string> actionEvolutionOptions = {"ThirtyShotBot","LongShotBot", "SemiAutoBot"};
-    vector<string> SeeingEvolutionOptions = {"Tracker","MapVisionBot"};
-    
-
+    vector<string> movementEvolutionOptions = {"JumpBot", "StealthBot"};
+    vector<string> actionEvolutionOptions = {"ThirtyShotBot", "LongShotBot", "SemiAutoBot"};
+    vector<string> SeeingEvolutionOptions = {"Tracker", "MapVisionBot"};
+    AbstractRobot *defaultModule;
+    AbstractRobot *moveModule;
 
 protected:
     string Name;
@@ -32,7 +32,7 @@ protected:
 public:
     int posX;
     int posY;
-    Unit(AbstractGame* game, string name, int initialX, int initialY);
+    Unit(AbstractGame *game, string name, int initialX, int initialY);
     void updatePos(int x, int y);
     void evolve();
     void move(int direction);

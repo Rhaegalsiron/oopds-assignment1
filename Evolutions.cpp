@@ -1,15 +1,54 @@
 
 #include "Evolutions.h"
-#include "Types.h"
 #include <iostream>
 using namespace std;
 
-Vector2D JumpBot::moveSpecial(int x, int y)
+Robot::Robot(Unit *unit)
 {
-    if (chargesRemaining > 0)
+    this->unit = unit;
+}
+
+bool GenericRobot::move(int x, int y)
+{
+    if (x > 0)
     {
-        chargesRemaining--;
-        return Vector2D(x, y);
+        x = 1;
     }
-    return Vector2D(INVALID_POSITION, INVALID_POSITION);
+    else if (x < 0)
+    {
+        x = -1;
+    }
+    if (y > 0)
+    {
+        y = 1;
+    }
+    else if (y < 0)
+    {
+        y = -1;
+    }
+    this->unit->updatePos(x, y);
+    return true;
+}
+
+bool GenericRobot::fire(int x, int y)
+{
+    // TODO: Move fire definition from Unit to here.
+    return false;
+}
+
+bool GenericRobot::look(int x, int y)
+{
+    // TODO: Implement look.
+    return false;
+}
+
+bool JumpBot::move(int x, int y)
+{
+    if (chargesRemaining <= 0)
+    {
+        return false;
+    }
+    this->unit->updatePos(x, y);
+    chargesRemaining--;
+    return true;
 }

@@ -8,6 +8,7 @@ class Unit;
 class Grid
 {
 public:
+    Grid();
     Unit *occupyingUnit;
 };
 

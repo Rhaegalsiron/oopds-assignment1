@@ -5,9 +5,10 @@
 Unit::Unit(AbstractGame *game, string name, int initialX, int initialY)
 {
     this->Name = name;
-    this->updatePos(initialX, initialY);
     this->game = game;
     this->field = this->game->field;
+    this->defaultModule = new GenericRobot(this);
+    this->updatePos(initialX, initialY);
 }
 
 void Unit::move(int direction)
@@ -47,28 +48,15 @@ void Unit::move(int direction)
         newPosY -= 1;
     }
 
-    // TODO: COMPLETE HANDLING OF MOVEMENT
-    this->field->isPosValid(newPosX, newPosY);
+    this->move(newPosX, newPosY);
 };
 
 void Unit::move(int x, int y)
 {
-    int newPosY = this->posY;
-    int newPosX = this->posX; 
-    if (newPosX > 0){
-        newPosX = 1;
-    }
-    else if (newPosX < 0){
-        newPosX = -1;
-    }
-    if (newPosY > 0){
-        newPosY = 1;
-    }
-    else if (newPosY < 0){
-        newPosY = -1;
-    }
-    
-
+    if (!(this->moveModule) && !(this->moveModule->move(x, y)))
+    {
+        this->defaultModule->move(x, y);
+    };
 };
 
 void Unit::fire(int x, int y)
@@ -106,6 +94,28 @@ void Unit::destroy()
 
 void Unit::updatePos(int x, int y)
 {
+    // Clamping x and y to the battlefield
+    if (x > this->field->map[0].size())
+    {
+        x = this->field->map[0].size();
+    }
+    if (x < 0)
+    {
+        x = 0;
+    }
+    if (y > this->field->map.size())
+    {
+        y = this->field->map.size();
+    }
+    if (y < 0)
+    {
+        y = 0;
+    }
     this->posX = x;
     this->posY = y;
+
+    Grid *grid = this->game->field->getGrid(this->posX, this->posY);
+    grid->occupyingUnit = NULL;
+    grid = this->field->getGrid(x, y);
+    grid->occupyingUnit = this;
 };

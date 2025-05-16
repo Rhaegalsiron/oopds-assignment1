@@ -1,33 +1,54 @@
+#pragma once
 #define INVALID_POSITION -999999999
 #include <iostream>
 #include "Types.h"
+#include "AbstractRobot.h"
+#include "Unit.h"
 using namespace std;
 
-class GenericBot{
-    public:
-    Vector2D move(int x, int y);
-    void fire(int x, int y);
-    void look(int x, int y);
-
+class Robot : public AbstractRobot
+{
+public:
+    Robot(Unit *unit);
+    Unit *unit;
 };
 
-class MoveBot{
-    public:
-        virtual Vector2D moveSpecial(int x, int y) = 0;
+class GenericRobot : public Robot
+{
+public:
+    using Robot::Robot;
+    bool move(int x, int y);
+    bool fire(int x, int y);
+    bool look(int x, int y);
 };
 
-class ActionBot{
-    public:
-        virtual void fireSpecial(int x, int y) = 0;
+class MoveBot : public Robot
+{
+public:
+    virtual bool move(int x, int y) = 0;
+    bool fire(int x, int y) { return false; };
+    bool look(int x, int y) { return false; };
 };
 
-class SeeingBot{
-    public:
-        virtual void lookSpecial(int x, int y) = 0;
+class ActionBot : public Robot
+{
+public:
+    virtual bool fire(int x, int y) = 0;
+    bool move(int x, int y) { return false; };
+    bool look(int x, int y) { return false; };
 };
 
-class JumpBot: public MoveBot{
-    public:
-        int chargesRemaining = 3;
-        Vector2D moveSpecial(int x,int y);
+class SeeingBot : public Robot
+{
+public:
+    virtual bool look(int x, int y) = 0;
+    bool move(int x, int y) { return false; };
+    bool fire(int x, int y) { return false; };
+};
+
+class JumpBot : public MoveBot
+{
+public:
+    int chargesRemaining = 3;
+    bool move(int x, int y);
 };
