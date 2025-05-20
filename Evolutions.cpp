@@ -59,11 +59,11 @@ JumpBot::JumpBot(Unit *unit)
 
 bool JumpBot::move(int x, int y)
 {
-    if (chargesRemaining <= 0)
+    if (this->chargesRemaining<= 0)
     {
         return false;
     }
     this->unit->updatePos(x, y);
-    chargesRemaining--;
+    this->chargesRemaining--;
     return true;
 }

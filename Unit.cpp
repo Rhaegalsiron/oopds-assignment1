@@ -60,10 +60,13 @@ void Unit::move(int direction)
 
 void Unit::move(int x, int y)
 {
-    if (!(this->moveModule) && !(this->moveModule->move(x, y)))
+    if (!this->moveModule)
     {
         this->defaultModule->move(x, y);
-    };
+    }
+    else{
+        this->moveModule->move(x,y);
+    }
     this->messageLog.push_back(this->Name + " moved to coordinates ( " + to_string(x) + "," + to_string(y) + ").");
 };
 
@@ -71,6 +74,7 @@ void Unit::fire(int x, int y)
 {
     Grid *targetGrid = this->field->getGrid(x, y);
     bool isSuccessfulHit;
+    Unit *targetUnit = targetGrid->occupyingUnit;
     if (!this->fireModule)
     {
         isSuccessfulHit = this->defaultModule->fire(x, y);
@@ -80,17 +84,18 @@ void Unit::fire(int x, int y)
         isSuccessfulHit = this->fireModule->fire(x, y);
     }
 
-    if (targetGrid->occupyingUnit == NULL)
+    if (targetUnit == NULL)
     {
         this->messageLog.push_back(this->Name + " fired at coordinates ( " + to_string(x) + "," + to_string(y) + ") but nothing was there.");
     }
 
-    if (targetGrid->occupyingUnit != NULL && isSuccessfulHit)
+    if (targetUnit != NULL && isSuccessfulHit)
     {
         this->canEvolve = true;
-        this->messageLog.push_back(this->Name + " fired at coordinates ( " + to_string(x) + "," + to_string(y) + ") and hit " + targetGrid->occupyingUnit->Name + ".");
+        this->messageLog.push_back(this->Name + " fired at coordinates ( " + to_string(x) + "," + to_string(y) + ") and hit " + targetUnit->Name + ".");
     }
-    if (targetGrid->occupyingUnit != NULL && !isSuccessfulHit){
+    if (targetUnit != NULL && !isSuccessfulHit)
+    {
         this->messageLog.push_back(this->Name + " fired at coordinates ( " + to_string(x) + "," + to_string(y) + ") and missed.");
     }
 
@@ -101,13 +106,13 @@ void Unit::fire(int x, int y)
         this->destroy();
     }
 };
-void Unit::look(int x, int y) {
+void Unit::look(int x, int y)
+{
     if (!(this->seeingModule) && !(this->seeingModule->look(x, y)))
     {
         this->defaultModule->look(x, y);
     };
     this->messageLog.push_back(this->Name + " looked at coordinates ( " + to_string(x) + "," + to_string(y) + ").");
-    
 };
 
 vector<int> Unit::getEvolutionOptions() // use this for your thinking robot
@@ -139,7 +144,7 @@ vector<int> Unit::getEvolutionOptions() // use this for your thinking robot
 
 void Unit::evolve(int evolutionOption)
 {
-    if (!this->canEvolve)
+    if (!this->canEvolve) // If the Robot cannot evolve. just exit function early
     {
         return;
     }

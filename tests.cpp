@@ -136,11 +136,89 @@ bool test_fire()
     return true;
 };
 
+bool test_evolve()
+{
+    Game *game = fixture_createGame();
+    Battlefield *battlefield1 = game->field;
+
+    Grid *grid = battlefield1->getGrid(0, 0);
+    Unit *tUnit1 = grid->occupyingUnit = new Unit(game, "tUnit1", 0, 0);
+    grid = battlefield1->getGrid(0, 1);
+    Unit *tUnit2 = grid->occupyingUnit = new Unit(game, "tUnit2", 0, 1);
+
+    if (tUnit1->moveModule != NULL)
+    {
+        log("moveModule is not NULL");
+        return false;
+    }
+
+    tUnit1->defaultModule->hitChance = 0;
+    tUnit1->fire(0, 1);
+    if (tUnit1->canEvolve)
+    {
+        log("tUnit1 can evolve eventhough no Unit is destroyed");
+        return false;
+    }
+
+    tUnit1->defaultModule->hitChance = 100;
+    tUnit1->fire(0, 1);
+    if (!tUnit1->canEvolve)
+    {
+        log("tUnit1 cannot evolve eventhough unit is destroyed");
+        return false;
+    }
+
+    // to check whether all 7 evolution options are available
+    if (tUnit1->getEvolutionOptions().size() != 7)
+    {
+        log("tUnit1 evolutionOptions is not 7");
+        return false;
+    }
+
+    tUnit1->evolve(JUMP_BOT);
+    // check if tUnit1 has evolved to JumpBot
+    if (tUnit1->moveModule == NULL)
+    {
+        log("tUnit1 move module is still null even after evolution");
+        return false;
+    }
+
+    if (tUnit1->getEvolutionOptions().size() > 5)
+    {
+        log("tUnit1 has more than 5 evolutionOptions even after evolving");
+        return false;
+    }
+
+    vector<int> evolutionOptions = tUnit1->getEvolutionOptions();
+    // To ensure JumpBot is no longer an available option
+    if (std::find(evolutionOptions.begin(), evolutionOptions.end(), JUMP_BOT) != evolutionOptions.end())
+    {
+        log("JumpBot still in tUnit1 evolutionOptions");
+        return false;
+    }
+    // To ensure StealthBot is no longer an available option
+    if (std::find(evolutionOptions.begin(), evolutionOptions.end(), STEALTH_BOT) != evolutionOptions.end())
+    {
+        log("StealthBot still in tUnit1 evolutionOptions");
+        return false;
+    }
+
+    tUnit1->move(2, 2);
+    if (battlefield1->getGrid(2, 2)->occupyingUnit != tUnit1)
+    {
+        log("tUnit1 cannot use the JumpBot functionality");
+        return false;
+    }
+
+    return true;
+}
+
 void runTests()
 {
     cout << "Battlefield test " << (test_battlefield() ? "passed" : "failed") << endl;
     cout << "fire test " << (test_fire() ? "passed" : "failed") << endl;
     cout << "respawn test " << (test_respawn() ? "passed" : "failed") << endl;
+    cout << "evolve test " << (test_evolve() ? "passed" : "failed") << endl;
     cout << testLogs.size() << " test log(s):" << endl;
     testLogs;
     for (int i = 0; i < testLogs.size(); i++)
