@@ -8,9 +8,16 @@ Unit::Unit(AbstractGame *game, string name, int initialX, int initialY)
     this->game = game;
     this->field = this->game->field;
     this->defaultModule = new GenericRobot(this);
+    this->magazineSize = 20;
+    this->canEvolve = false;
     this->updatePos(initialX, initialY);
+    this->reset();
 }
 
+void Unit::reset()
+{
+    this->shellsRemaining = this->magazineSize;
+}
 void Unit::move(int direction)
 {
     int newPosY = this->posY;
@@ -57,30 +64,106 @@ void Unit::move(int x, int y)
     {
         this->defaultModule->move(x, y);
     };
+    this->messageLog.push_back(this->Name + " moved to coordinates ( " + to_string(x) + "," + to_string(y) + ").");
 };
 
 void Unit::fire(int x, int y)
 {
     Grid *targetGrid = this->field->getGrid(x, y);
-    if (targetGrid->occupyingUnit != NULL)
+    bool isSuccessfulHit;
+    if (!this->fireModule)
     {
-        bool successfulHit = rand() % 100 <= 30;
-        if (successfulHit)
-        {
-            targetGrid->occupyingUnit->destroy();
-            this->evolve();
-        }
-        return;
+        isSuccessfulHit = this->defaultModule->fire(x, y);
     }
-    cout << "No hit" << endl;
+    else
+    {
+        isSuccessfulHit = this->fireModule->fire(x, y);
+    }
+
+    if (targetGrid->occupyingUnit == NULL)
+    {
+        this->messageLog.push_back(this->Name + " fired at coordinates ( " + to_string(x) + "," + to_string(y) + ") but nothing was there.");
+    }
+
+    if (targetGrid->occupyingUnit != NULL && isSuccessfulHit)
+    {
+        this->canEvolve = true;
+        this->messageLog.push_back(this->Name + " fired at coordinates ( " + to_string(x) + "," + to_string(y) + ") and hit " + targetGrid->occupyingUnit->Name + ".");
+    }
+    if (targetGrid->occupyingUnit != NULL && !isSuccessfulHit){
+        this->messageLog.push_back(this->Name + " fired at coordinates ( " + to_string(x) + "," + to_string(y) + ") and missed.");
+    }
+
+    this->shellsRemaining--;
+    if (this->shellsRemaining == 0)
+    {
+        this->messageLog.push_back(this->Name + " has emptied its magazine.");
+        this->destroy();
+    }
 };
 void Unit::look(int x, int y) {
-
+    if (!(this->seeingModule) && !(this->seeingModule->look(x, y)))
+    {
+        this->defaultModule->look(x, y);
+    };
+    this->messageLog.push_back(this->Name + " looked at coordinates ( " + to_string(x) + "," + to_string(y) + ").");
+    
 };
 
-void Unit::evolve()
+vector<int> Unit::getEvolutionOptions() // use this for your thinking robot
 {
-    cout << "Evolving" << endl;
+    vector<int> evolutionOptions;
+    if (this->moveModule == NULL)
+    {
+        for (int i = 0; i < this->movementEvolutionOptions.size(); i++)
+        {
+            evolutionOptions.push_back(this->movementEvolutionOptions[i]);
+        }
+    }
+    if (this->fireModule == NULL)
+    {
+        for (int i = 0; i < this->actionEvolutionOptions.size(); i++)
+        {
+            evolutionOptions.push_back(this->actionEvolutionOptions[i]);
+        }
+    }
+    if (this->seeingModule == NULL)
+    {
+        for (int i = 0; i < this->SeeingEvolutionOptions.size(); i++)
+        {
+            evolutionOptions.push_back(this->SeeingEvolutionOptions[i]);
+        }
+    }
+    return evolutionOptions;
+}
+
+void Unit::evolve(int evolutionOption)
+{
+    if (!this->canEvolve)
+    {
+        return;
+    }
+    string selectedEvolution;
+    switch (evolutionOption)
+    {
+    case JUMP_BOT:
+        this->moveModule = new JumpBot(this);
+        selectedEvolution = "JumpBot";
+        break;
+    case STEALTH_BOT: // TODO: Implement the remaining evolution path
+        break;
+    case THIRTY_SHOT_BOT:
+        break;
+    case LONG_SHOT_BOT:
+        break;
+    case SEMI_AUTO_BOT:
+        break;
+    case TRACKER_BOT:
+        break;
+    case MAP_VISION_BOT:
+        break;
+    }
+    this->messageLog.push_back("Evolving into " + selectedEvolution + ".");
 };
 
 void Unit::destroy()
@@ -89,6 +172,8 @@ void Unit::destroy()
     grid->occupyingUnit = NULL;
     this->posX = -1;
     this->posY = -1;
+    this->messageLog.push_back(this->Name + " is destroyed.");
+    this->reset();
     this->game->addToRespawn(this);
 };
 

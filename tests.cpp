@@ -1,5 +1,13 @@
 #include "tests.h"
 
+vector<string> testLogs;
+
+void log(string message)
+{
+    int timestamp = system_clock::now().time_since_epoch().count();
+    testLogs.push_back(to_string(timestamp) + ": " + message);
+}
+
 Game *fixture_createGame()
 {
     Game *game = new Game();
@@ -65,6 +73,8 @@ bool test_respawn()
     {
         return false;
     }
+    tUnit1->defaultModule->hitChance = 100;
+    log("tUnit1 hitchance: " + to_string(tUnit1->defaultModule->hitChance));
     tUnit1->fire(0, 1);
     if (game->respawnQueue.size() < 1)
     {
@@ -99,10 +109,22 @@ bool test_fire()
     grid = battlefield1->getGrid(0, 1);
     Unit *tUnit2 = grid->occupyingUnit = new Unit(game, "tUnit2", 0, 1);
 
+    tUnit1->defaultModule->hitChance = 0;
+    log("tUnit1 hitchance: " + to_string(tUnit1->defaultModule->hitChance));
+
+    tUnit1->fire(0, 1);
+    if (battlefield1->getGrid(0, 1)->occupyingUnit == NULL)
+    {
+        log("Unit is not occupying (0,1) and destroyed.");
+        return false;
+    }
+
+    tUnit1->defaultModule->hitChance = 100;
+    log("tUnit1 hitchance: " + to_string(tUnit1->defaultModule->hitChance));
     tUnit1->fire(0, 1);
     if (battlefield1->getGrid(0, 1)->occupyingUnit != NULL)
     {
-        cout << "Unit still occupying 0,1 and not destroyed" << endl;
+        log("Unit still occupying (0,1) and not destroyed.");
         return false;
     }
 
@@ -113,3 +135,16 @@ bool test_fire()
 
     return true;
 };
+
+void runTests()
+{
+    cout << "Battlefield test " << (test_battlefield() ? "passed" : "failed") << endl;
+    cout << "fire test " << (test_fire() ? "passed" : "failed") << endl;
+    cout << "respawn test " << (test_respawn() ? "passed" : "failed") << endl;
+    cout << testLogs.size() << " test log(s):" << endl;
+    testLogs;
+    for (int i = 0; i < testLogs.size(); i++)
+    {
+        cout << testLogs[i] << endl;
+    }
+}

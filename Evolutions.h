@@ -9,14 +9,13 @@ using namespace std;
 class Robot : public AbstractRobot
 {
 public:
-    Robot(Unit *unit);
     Unit *unit;
 };
 
 class GenericRobot : public Robot
 {
 public:
-    using Robot::Robot;
+    GenericRobot(Unit *unit);
     bool move(int x, int y);
     bool fire(int x, int y);
     bool look(int x, int y);
@@ -49,6 +48,7 @@ public:
 class JumpBot : public MoveBot
 {
 public:
+    JumpBot(Unit *unit);
     int chargesRemaining = 3;
     bool move(int x, int y);
 };

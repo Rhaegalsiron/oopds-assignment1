@@ -8,8 +8,6 @@ using namespace std;
 
 int main()
 {
-    cout << "Battlefield test " << (test_battlefield() ? "passed" : "failed") << endl;
-    cout << "fire test " << (test_fire() ? "passed" : "failed") << endl;
-    cout << "respawn test" << (test_respawn() ? "passed":"failed")<< endl;
+    runTests();
     return 0;
 }

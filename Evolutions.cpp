@@ -3,9 +3,10 @@
 #include <iostream>
 using namespace std;
 
-Robot::Robot(Unit *unit)
+GenericRobot::GenericRobot(Unit *unit)
 {
     this->unit = unit;
+    this->hitChance = 70;
 }
 
 bool GenericRobot::move(int x, int y)
@@ -32,7 +33,16 @@ bool GenericRobot::move(int x, int y)
 
 bool GenericRobot::fire(int x, int y)
 {
-    // TODO: Move fire definition from Unit to here.
+    Grid *targetGrid = this->unit->field->getGrid(x, y);
+    if (targetGrid->occupyingUnit != NULL)
+    {
+        bool successfulHit = rand() % 100 < this->hitChance;
+        if (successfulHit)
+        {
+            targetGrid->occupyingUnit->destroy();
+            return true;
+        }
+    }
     return false;
 }
 
@@ -40,6 +50,11 @@ bool GenericRobot::look(int x, int y)
 {
     // TODO: Implement look.
     return false;
+}
+
+JumpBot::JumpBot(Unit *unit)
+{
+    this->unit = unit;
 }
 
 bool JumpBot::move(int x, int y)

@@ -5,6 +5,9 @@ using namespace std;
 
 class AbstractRobot
 {
+protected:
+    int hitChance;
+
 public:
     virtual bool move(int x, int y) = 0;
     virtual bool fire(int x, int y) = 0;
