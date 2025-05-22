@@ -1,6 +1,8 @@
 #include "BattleField.h"
 
-Grid::Grid() {
+Grid::Grid(int x, int y) {
+    this->x = x;
+    this->y = y;
     this->occupyingUnit = NULL;
 }
 
@@ -11,7 +13,7 @@ void Battlefield::generateMap(int sizeX, int sizeY)
     {
         for (int x = 0; x < sizeX; x++)
         {
-            this->map[y][x] = new Grid;
+            this->map[y][x] = new Grid(x, y);
         }
     }
 };

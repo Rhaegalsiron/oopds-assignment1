@@ -8,7 +8,9 @@ class Unit;
 class Grid
 {
 public:
-    Grid();
+    Grid(int x, int y);
+    int x;
+    int y;
     Unit *occupyingUnit;
 };
 

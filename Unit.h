@@ -29,14 +29,13 @@ public:
     vector<string> messageLog;
     string Name;
     Battlefield *field;
+    Grid *currentGrid;
     bool canEvolve;
     bool hasMoved;
     bool hasFired;
     bool hasLooked;
     int shellsRemaining;
     int magazineSize;
-    int posX;
-    int posY;
     Unit(AbstractGame *game, string name, int initialX, int initialY);
     void updatePos(int x, int y);
     vector<int> getEvolutionOptions(); // use this to call for evolution option for your thinking robot

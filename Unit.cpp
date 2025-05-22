@@ -15,7 +15,8 @@ Unit::Unit(AbstractGame *game, string name, int initialX, int initialY)
     this->reset();
 }
 
-void Unit::turnReset() {
+void Unit::turnReset()
+{
     this->hasMoved = false;
     this->hasFired = false;
     this->hasLooked = false;
@@ -29,8 +30,8 @@ void Unit::reset()
 
 void Unit::move(int direction)
 {
-    int newPosY = this->posY;
-    int newPosX = this->posX;
+    int newPosY = this->currentGrid->x;
+    int newPosX = this->currentGrid->y;
     switch (direction)
     {
     case Directions::STAY:
@@ -69,14 +70,16 @@ void Unit::move(int direction)
 
 void Unit::move(int x, int y)
 {
-    if(this->hasMoved){
+    if (this->hasMoved)
+    {
         return;
     }
     this->hasMoved = this->defaultModule->move(x, y);
     this->messageLog.push_back(this->Name + " moved to coordinates ( " + to_string(x) + "," + to_string(y) + ").");
 };
 
-void Unit::afterFiring(Unit *targetUnit, bool isSuccessfulHit, int x, int y) {
+void Unit::afterFiring(Unit *targetUnit, bool isSuccessfulHit, int x, int y)
+{
     if (targetUnit == NULL)
     {
         this->messageLog.push_back(this->Name + " fired at coordinates ( " + to_string(x) + "," + to_string(y) + ") but nothing was there.");
@@ -106,7 +109,8 @@ void Unit::fire(int x, int y)
     Grid *targetGrid = this->field->getGrid(x, y);
     bool isSuccessfulHit;
     Unit *targetUnit = targetGrid->occupyingUnit;
-    if (this->hasFired) {
+    if (this->hasFired)
+    {
         return;
     }
 
@@ -183,10 +187,8 @@ void Unit::evolve(int evolutionOption)
 
 void Unit::destroy()
 {
-    Grid *grid = this->field->getGrid(this->posX, this->posY);
-    grid->occupyingUnit = NULL;
-    this->posX = -1;
-    this->posY = -1;
+    this->currentGrid->occupyingUnit = NULL;
+    this->currentGrid = NULL;
     this->messageLog.push_back(this->Name + " is destroyed.");
     this->reset();
     this->game->addToRespawn(this);
@@ -211,11 +213,12 @@ void Unit::updatePos(int x, int y)
     {
         y = 0;
     }
-    this->posX = x;
-    this->posY = y;
 
-    Grid *grid = this->game->field->getGrid(this->posX, this->posY);
-    grid->occupyingUnit = NULL;
-    grid = this->field->getGrid(x, y);
-    grid->occupyingUnit = this;
+    if (this->currentGrid != NULL)
+    {
+        this->currentGrid->occupyingUnit = NULL;
+    }
+    Grid *grid = this->game->field->getGrid(x, y);
+    this->currentGrid = grid;
+    this->currentGrid->occupyingUnit = this;
 };

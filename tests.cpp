@@ -128,7 +128,7 @@ bool test_fire()
         return false;
     }
 
-    if (tUnit2->posX != -1 && tUnit2->posY != -1)
+    if (tUnit2->currentGrid != NULL)
     {
         return false;
     }
