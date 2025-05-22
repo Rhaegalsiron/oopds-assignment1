@@ -1,13 +1,5 @@
 #pragma once
 
-#define JUMP_BOT 0 // Im Redefining it to an integer so its easy to call for 
-#define STEALTH_BOT 1// your thinking bot later on
-#define THIRTY_SHOT_BOT 2
-#define LONG_SHOT_BOT 3
-#define SEMI_AUTO_BOT 4
-#define TRACKER_BOT 5
-#define MAP_VISION_BOT 6
-
 #include <iostream>
 #include <string>
 #include "BattleField.h"
@@ -38,8 +30,9 @@ public:
     string Name;
     Battlefield *field;
     bool canEvolve;
-    bool isInvincible;
-    bool isScouting;
+    bool hasMoved;
+    bool hasFired;
+    bool hasLooked;
     int shellsRemaining;
     int magazineSize;
     int posX;
@@ -51,7 +44,9 @@ public:
     void move(int direction);
     void move(int x, int y);
     void fire(int x, int y);
+    void afterFiring(Unit *targetUnit, bool isSuccessfulHit, int x, int y); // call this after using ability of SemiAutoBot/LongShotBot
     void look(int x, int y);
     void destroy();
     void reset();
+    void turnReset();
 };

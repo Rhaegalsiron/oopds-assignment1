@@ -1,6 +1,7 @@
 #include "Unit.h"
 #include "Directions.h"
 #include "Evolutions.h"
+#include "JumpBot.h"
 
 Unit::Unit(AbstractGame *game, string name, int initialX, int initialY)
 {
@@ -14,10 +15,18 @@ Unit::Unit(AbstractGame *game, string name, int initialX, int initialY)
     this->reset();
 }
 
+void Unit::turnReset() {
+    this->hasMoved = false;
+    this->hasFired = false;
+    this->hasLooked = false;
+}
+
 void Unit::reset()
 {
+    this->turnReset();
     this->shellsRemaining = this->magazineSize;
 }
+
 void Unit::move(int direction)
 {
     int newPosY = this->posY;
@@ -60,30 +69,14 @@ void Unit::move(int direction)
 
 void Unit::move(int x, int y)
 {
-    if (!this->moveModule)
-    {
-        this->defaultModule->move(x, y);
+    if(this->hasMoved){
+        return;
     }
-    else{
-        this->moveModule->move(x,y);
-    }
+    this->hasMoved = this->defaultModule->move(x, y);
     this->messageLog.push_back(this->Name + " moved to coordinates ( " + to_string(x) + "," + to_string(y) + ").");
 };
 
-void Unit::fire(int x, int y)
-{
-    Grid *targetGrid = this->field->getGrid(x, y);
-    bool isSuccessfulHit;
-    Unit *targetUnit = targetGrid->occupyingUnit;
-    if (!this->fireModule)
-    {
-        isSuccessfulHit = this->defaultModule->fire(x, y);
-    }
-    else
-    {
-        isSuccessfulHit = this->fireModule->fire(x, y);
-    }
-
+void Unit::afterFiring(Unit *targetUnit, bool isSuccessfulHit, int x, int y) {
     if (targetUnit == NULL)
     {
         this->messageLog.push_back(this->Name + " fired at coordinates ( " + to_string(x) + "," + to_string(y) + ") but nothing was there.");
@@ -94,6 +87,7 @@ void Unit::fire(int x, int y)
         this->canEvolve = true;
         this->messageLog.push_back(this->Name + " fired at coordinates ( " + to_string(x) + "," + to_string(y) + ") and hit " + targetUnit->Name + ".");
     }
+
     if (targetUnit != NULL && !isSuccessfulHit)
     {
         this->messageLog.push_back(this->Name + " fired at coordinates ( " + to_string(x) + "," + to_string(y) + ") and missed.");
@@ -105,7 +99,22 @@ void Unit::fire(int x, int y)
         this->messageLog.push_back(this->Name + " has emptied its magazine.");
         this->destroy();
     }
+}
+
+void Unit::fire(int x, int y)
+{
+    Grid *targetGrid = this->field->getGrid(x, y);
+    bool isSuccessfulHit;
+    Unit *targetUnit = targetGrid->occupyingUnit;
+    if (this->hasFired) {
+        return;
+    }
+
+    isSuccessfulHit = this->defaultModule->fire(x, y);
+
+    this->afterFiring(targetUnit, isSuccessfulHit, x, y);
 };
+
 void Unit::look(int x, int y)
 {
     if (!(this->seeingModule) && !(this->seeingModule->look(x, y)))
@@ -169,6 +178,7 @@ void Unit::evolve(int evolutionOption)
         break;
     }
     this->messageLog.push_back("Evolving into " + selectedEvolution + ".");
+    this->canEvolve = false;
 };
 
 void Unit::destroy()

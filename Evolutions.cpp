@@ -51,19 +51,3 @@ bool GenericRobot::look(int x, int y)
     // TODO: Implement look.
     return false;
 }
-
-JumpBot::JumpBot(Unit *unit)
-{
-    this->unit = unit;
-}
-
-bool JumpBot::move(int x, int y)
-{
-    if (this->chargesRemaining<= 0)
-    {
-        return false;
-    }
-    this->unit->updatePos(x, y);
-    this->chargesRemaining--;
-    return true;
-}

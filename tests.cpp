@@ -203,7 +203,7 @@ bool test_evolve()
         return false;
     }
 
-    tUnit1->move(2, 2);
+    tUnit1->moveModule->useAbility(2, 2);
     if (battlefield1->getGrid(2, 2)->occupyingUnit != tUnit1)
     {
         log("tUnit1 cannot use the JumpBot functionality");
