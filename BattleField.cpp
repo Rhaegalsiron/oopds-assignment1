@@ -43,7 +43,7 @@ void Battlefield::displayMap()
     cout << "\n";
 };
 
-bool Battlefield::isPosValid(int x, int y)
+bool Battlefield::isPosValid(int x, int y) // This for restricting the movement when the Robot touches the end of the battlefield range
 {
     if (
         (y < this->map.size() && y >= 0) || (x < this->map[0].size() && x >= 0))
