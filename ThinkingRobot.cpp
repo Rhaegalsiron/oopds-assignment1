@@ -45,7 +45,7 @@ void ThinkingRobot::thinkRobot()
                     this->unit->moveModule->useAbility();
                     break;
                 case 2:
-                    this->unit->defaultModule->move(randomDirection);
+                    this->unit->move(randomDirection); // for the default movement, just call the
                     break;
                 }
             }

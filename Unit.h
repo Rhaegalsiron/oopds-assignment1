@@ -14,6 +14,7 @@ private:
     vector<int> movementEvolutionOptions = {JUMP_BOT, STEALTH_BOT};
     vector<int> actionEvolutionOptions = {THIRTY_SHOT_BOT, LONG_SHOT_BOT, SEMI_AUTO_BOT};
     vector<int> SeeingEvolutionOptions = {TRACKER_BOT, MAP_VISION_BOT};
+    AbstractRobot *defaultModule;
 
 protected:
     string Type;
@@ -24,7 +25,6 @@ public:
     string Name;
     Battlefield *field;
     Grid *currentGrid;
-    AbstractRobot *defaultModule;
     AbstractRobot *thinkingModule;
     AbstractRobot *moveModule;
     AbstractRobot *fireModule;

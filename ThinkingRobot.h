@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm> // added this for you 
 #include "BattleField.h"
 #include "AbstractGame.h"
 #include "AbstractRobot.h"
