@@ -1,0 +1,27 @@
+#pragma once
+#include <iostream>
+#include <string>
+#include <vector>
+#include "BattleField.h"
+#include "AbstractGame.h"
+#include "AbstractRobot.h"
+#include "Unit.h"
+#include "Evolutions.h"
+#include "Directions.h"
+using namespace std;
+
+class ThinkingRobot : public Robot
+
+{
+public:
+    ThinkingRobot(Unit *unit); 
+    int targetX, targetY;
+    vector<vector<string>> actionsOrder;
+
+    void thinkRobot();
+    pair<int, int> randomDirection(int x, int y);
+
+private:
+    bool detectedRobot;
+
+};
