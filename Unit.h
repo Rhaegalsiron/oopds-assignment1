@@ -1,7 +1,7 @@
 #pragma once
-
 #include <iostream>
 #include <string>
+#include "GenericRobot.h"
 #include "BattleField.h"
 #include "AbstractGame.h"
 #include "AbstractRobot.h"
@@ -29,6 +29,7 @@ public:
     AbstractRobot *moveModule;
     AbstractRobot *fireModule;
     AbstractRobot *seeingModule;
+    Unit *seenUnit;
     bool canEvolve;
     bool hasMoved;
     bool hasFired;
@@ -43,7 +44,7 @@ public:
     void move(int x, int y);
     void fire(int x, int y);
     void afterFiring(Unit *targetUnit, bool isSuccessfulHit, int x, int y); // call this after using ability of SemiAutoBot/LongShotBot
-    void look(int x, int y);
+    Unit *look(int x, int y);
     void destroy();
     void reset();
     void turnReset();

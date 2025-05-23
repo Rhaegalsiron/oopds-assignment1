@@ -119,13 +119,29 @@ void Unit::fire(int x, int y)
     this->afterFiring(targetUnit, isSuccessfulHit, x, y);
 };
 
-void Unit::look(int x, int y)
+Unit *Unit::look(int x, int y)
 {
-    if (!(this->seeingModule) && !(this->seeingModule->look(x, y)))
+    if (this->hasLooked)
     {
-        this->defaultModule->look(x, y);
-    };
-    this->messageLog.push_back(this->Name + " looked at coordinates ( " + to_string(x) + "," + to_string(y) + ").");
+        return this->seenUnit;
+    }
+
+    this->defaultModule->look(x, y);
+
+    string message = this->Name + " looked at coordinates ( " + to_string(x) + "," + to_string(y) + ")";
+
+    if (this->seenUnit == NULL)
+    {
+        message += " and saw nothing.";
+    }
+    else
+    {
+        message += " and saw " + this->seenUnit->Name;
+    }
+
+    this->messageLog.push_back(message);
+
+    return this->seenUnit;
 };
 
 vector<int> Unit::getEvolutionOptions() // use this for your thinking robot
