@@ -213,12 +213,62 @@ bool test_evolve()
     return true;
 }
 
+bool test_look()
+{
+    Game *game = fixture_createGame();
+    Battlefield *battlefield1 = game->field;
+
+    Grid *grid = battlefield1->getGrid(0, 0);
+    Unit *tUnit1 = grid->occupyingUnit = new Unit(game, "tUnit1", 0, 0);
+    grid = battlefield1->getGrid(0, 1);
+    Unit *tUnit2 = grid->occupyingUnit = new Unit(game, "tUnit2", 0, 1);
+
+    Unit *tLookUnit = tUnit1->look(0, 1);
+    if (tLookUnit == NULL)
+    {
+        log("Unit not found.");
+        return false;
+    }
+
+    if (tLookUnit != tUnit2)
+    {
+        log("Unit looked at is not the same as the Unit in that grid.");
+        return false;
+    }
+
+    tUnit1->turnReset();
+    grid = battlefield1->getGrid(0, 2);
+    Unit *tUnit3 = grid->occupyingUnit = new Unit(game, "tUnit3", 0, 2);
+
+    tLookUnit = tUnit1->look(0, 2);
+    if (tLookUnit == tUnit3)
+    {
+        log("tUnit3 should be out of vision range.");
+        return false;
+    }
+    if (tLookUnit != tUnit2)
+    {
+        log("Unit looked at is not tUnit2.");
+        return false;
+    }
+
+    tUnit1->turnReset();
+    tLookUnit=tUnit1->look(1,0);
+    if(tLookUnit != NULL){
+        log("No unit should be on looked at coordinates.");
+        return false;
+    }
+
+    return true;
+}
+
 void runTests()
 {
     cout << "Battlefield test " << (test_battlefield() ? "passed" : "failed") << endl;
     cout << "fire test " << (test_fire() ? "passed" : "failed") << endl;
     cout << "respawn test " << (test_respawn() ? "passed" : "failed") << endl;
     cout << "evolve test " << (test_evolve() ? "passed" : "failed") << endl;
+    cout << "look test " << (test_look() ? "passed" : "failed") << endl;
     cout << testLogs.size() << " test log(s):" << endl;
     testLogs;
     for (int i = 0; i < testLogs.size(); i++)

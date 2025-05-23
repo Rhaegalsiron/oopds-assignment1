@@ -11,6 +11,9 @@ Unit::Unit(AbstractGame *game, string name, int initialX, int initialY)
     this->defaultModule = new GenericRobot(this);
     this->magazineSize = 20;
     this->canEvolve = false;
+    this->moveModule = NULL;
+    this->fireModule = NULL;
+    this->seeingModule = NULL;
     this->updatePos(initialX, initialY);
     this->reset();
 }
@@ -20,6 +23,7 @@ void Unit::turnReset()
     this->hasMoved = false;
     this->hasFired = false;
     this->hasLooked = false;
+    this->seenUnit = NULL;
 }
 
 void Unit::reset()
@@ -127,6 +131,7 @@ Unit *Unit::look(int x, int y)
     }
 
     this->defaultModule->look(x, y);
+    this->hasLooked = true;
 
     string message = this->Name + " looked at coordinates ( " + to_string(x) + "," + to_string(y) + ")";
 
