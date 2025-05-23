@@ -13,8 +13,6 @@ public:
     Unit *unit;
 };
 
-
-
 // All special bots have must have a useAbility function that returns true if the ability is used, and false if the ability cannot be used.
 // Override the polymorphic method that is marked virtual for your specific bot.
 
@@ -24,6 +22,7 @@ public:
     bool useAbility(Unit *unit) { return false; };
     virtual bool useAbility() = 0;             // for StealthBot
     virtual bool useAbility(int x, int y) = 0; // for JumpBot
+    bool move(int direction) { return false; };
     bool move(int x, int y) { return false; };
     bool fire(int x, int y) { return false; };
     bool look(int x, int y) { return false; };
@@ -35,6 +34,7 @@ public:
     bool useAbility() { return false; };
     bool useAbility(Unit *unit) { return false; };
     virtual bool useAbility(int x, int y) = 0; // for LongShotBot and SemiAutoBot
+    bool move(int direction) { return false; };
     bool move(int x, int y) { return false; };
     bool fire(int x, int y) { return false; };
     bool look(int x, int y) { return false; };
@@ -46,6 +46,7 @@ public:
     bool useAbility(int x, int y) { return false; };
     virtual bool useAbility() = 0;           // for MapVisionBot
     virtual bool useAbility(Unit *unit) = 0; // for TrackerBot
+    bool move(int direction) { return false; };
     bool move(int x, int y) { return false; };
     bool fire(int x, int y) { return false; };
     bool look(int x, int y) { return false; };
