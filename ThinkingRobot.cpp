@@ -1,5 +1,6 @@
 #include "ThinkingRobot.h"
 #include "Evolutions.h"
+#include <algorithm>
 #include <cstdlib>
 #include <ctime>
 #include <vector>
@@ -35,8 +36,8 @@ void ThinkingRobot::thinkRobot()
             // if (this->unit->hasMoved = true)
             // TODO : Implement move.
             srand(static_cast<unsigned>(time(0)));
-            int randomDirection = rand() % 9;
-            if (this->unit->moveModule != NULL && this->unit->moveModule->robot_type == STEALTH_BOT) // edit this to access type via robot_type. also use ctrl+shift+i to keep the standard format
+            int Direction = rand() % 9;
+            if (this->unit->moveModule != NULL && this->unit->moveModule->robot_type == STEALTH_BOT) 
             {
                 int moveIndex = rand() % 2 + 1;
                 switch (moveIndex)
@@ -45,14 +46,27 @@ void ThinkingRobot::thinkRobot()
                     this->unit->moveModule->useAbility();
                     break;
                 case 2:
-                    this->unit->move(randomDirection); // for the default movement, just call the
+                    this->unit->move(Direction);
                     break;
                 }
+            } else if(this->unit->moveModule != NULL && this->unit->moveModule->robot_type == JUMP_BOT){
+                int moveIndex = rand() % 2 + 1;
+                std::pair<int, int> newCoordinates = randomDirection(x, y); // TODO : Implement JUMP for JUMPBOT in version 2.
+                int newX = newCoordinates.first; //temporary
+                int newY = newCoordinates.second; //temporary
+                switch (moveIndex)
+                {
+                    case 1:
+                        this->unit->moveModule->useAbility(newX, newY);
+                        break;
+                    case 2:
+                        this->unit->move(Direction);
+                        break;
+                }
             }
-            // you need to else if for jumpbot as well too
             else
             {
-                this->unit->defaultModule->move(randomDirection); // added a polymorhphic def in abstractRobot
+                this->unit->move(Direction);
             };
         }
         // LOOK
@@ -62,7 +76,7 @@ void ThinkingRobot::thinkRobot()
             int newX = newCoordinates.first;
             int newY = newCoordinates.second;
             srand(static_cast<unsigned>(time(0)));
-            if (this->unit->seeingModule != NULL && this->unit->seeingModule == "MAP_VISION_BOT") // do the same as I did for you on line 40
+            if (this->unit->seeingModule != NULL && this->unit->seeingModule->robot_type == MAP_VISION_BOT)
             {
                 int seeIndex = rand() % 2 + 1;
                 switch (seeIndex)
@@ -71,12 +85,12 @@ void ThinkingRobot::thinkRobot()
                     this->unit->seeingModule->useAbility();
                     break;
                 case 2:
-                    this->unit->defaultModule->look(newX, newY);
+                    this->unit->look(newX, newY);
                     break;
                 }
             }
-            else if (this->unit->seeingModule != NULL && this->unit->seeingModule == "TRACKER_BOT")
-            { // do the same as I did for you on line 40
+            else if (this->unit->seeingModule != NULL && this->unit->seeingModule->robot_type == TRACKER_BOT)
+            {
                 int seeIndex = rand() % 2 + 1;
                 switch (seeIndex)
                 {
@@ -84,13 +98,13 @@ void ThinkingRobot::thinkRobot()
                     this->unit->seeingModule->useAbility(newX, newY);
                     break;
                 case 2:
-                    this->unit->defaultModule->look(newX, newY);
+                    this->unit->look(newX, newY);
                     break;
                 }
             }
             else
             {
-                this->unit->defaultModule->look(newX, newY);
+                this->unit->look(newX, newY);
             }
         }
         // FIRE
@@ -108,7 +122,7 @@ void ThinkingRobot::thinkRobot()
             int newY = newCoordinates.second;
 
             srand(static_cast<unsigned>(time(0)));
-            if (this->unit->fireModule != NULL && this->unit->fireModule != "LONG_SHOT_BOT" && this->unit->fireModule != "SEMI_AUTO_BOT") // do the same as I did for you on line 40
+            if (this->unit->fireModule != NULL && this->unit->fireModule->robot_type != LONG_SHOT_BOT && this->unit->fireModule->robot_type != SEMI_AUTO_BOT)
             {
                 int fireIndex = rand() % 2 + 1;
                 switch (fireIndex)
@@ -117,13 +131,13 @@ void ThinkingRobot::thinkRobot()
                     this->unit->fireModule->useAbility();
                     break;
                 case 2:
-                    this->unit->defaultModule->fire(newX, newY);
+                    this->unit->fire(newX, newY);
                     break;
                 }
             }
             else
             {
-                this->unit->defaultModule->fire(newX, newY);
+                this->unit->fire(newX, newY);
             };
         }
     }
@@ -156,7 +170,7 @@ std::pair<int, int> ThinkingRobot::randomDirection(int x, int y) // TODO : Imple
 
     int randomIndex = rand() % validDirections.size();
     std::pair<int, int> chosenDirection = validDirections[randomIndex];
-    if (std::find(validTargets.begin(), validTargets.end(), chosenDirection) != validTargets.end()) // You need to import #include <algorithm> to your header file to use find method
+    if (std::find(validTargets.begin(), validTargets.end(), chosenDirection) != validTargets.end())
     {
         targetX = chosenDirection.first;
         targetY = chosenDirection.second;
