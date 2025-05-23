@@ -13,17 +13,7 @@ public:
     Unit *unit;
 };
 
-class GenericRobot : public Robot
-{
-public:
-    GenericRobot(Unit *unit);
-    bool useAbility() { return false; };
-    bool useAbility(int x, int y) { return false; };
-    bool useAbility(Unit *unit) { return false; };
-    bool move(int x, int y);
-    bool fire(int x, int y);
-    bool look(int x, int y);
-};
+
 
 // All special bots have must have a useAbility function that returns true if the ability is used, and false if the ability cannot be used.
 // Override the polymorphic method that is marked virtual for your specific bot.

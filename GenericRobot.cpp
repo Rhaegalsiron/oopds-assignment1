@@ -1,5 +1,5 @@
 
-#include "Evolutions.h"
+#include "GenericRobot.h"
 #include <iostream>
 using namespace std;
 
@@ -48,6 +48,22 @@ bool GenericRobot::fire(int x, int y)
 
 bool GenericRobot::look(int x, int y)
 {
-    // TODO: Implement look.
-    return false;
+    if (x > 0)
+    {
+        x = 1;
+    }
+    else if (x < 0)
+    {
+        x = -1;
+    }
+    if (y > 0)
+    {
+        y = 1;
+    }
+    else if (y < 0)
+    {
+        y = -1;
+    }
+    this->unit->seenUnit = this->unit->field->getGrid(x,y)->occupyingUnit;
+    return this->unit->seenUnit != NULL;
 }
