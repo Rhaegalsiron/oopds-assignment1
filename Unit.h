@@ -1,10 +1,11 @@
 #pragma once
 #include <iostream>
 #include <string>
-#include "GenericRobot.h"
-#include "BattleField.h"
 #include "AbstractGame.h"
+#include "BattleField.h"
+#include "Directions.h"
 #include "AbstractRobot.h"
+#include "Evolutions.h"
 using namespace std;
 
 class Unit

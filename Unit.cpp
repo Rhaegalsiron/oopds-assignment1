@@ -1,6 +1,6 @@
 #include "Unit.h"
-#include "Directions.h"
-#include "Evolutions.h"
+#include "GenericRobot.h"
+#include "ThinkingRobot.h"
 #include "JumpBot.h"
 
 Unit::Unit(AbstractGame *game, string name, int initialX, int initialY)
@@ -9,6 +9,7 @@ Unit::Unit(AbstractGame *game, string name, int initialX, int initialY)
     this->game = game;
     this->field = this->game->field;
     this->defaultModule = new GenericRobot(this);
+    this->thinkingModule = new ThinkingRobot(this);
     this->magazineSize = 20;
     this->canEvolve = false;
     this->moveModule = NULL;
@@ -112,6 +113,9 @@ void Unit::afterFiring(Unit *targetUnit, bool isSuccessfulHit, int x, int y)
 
 bool Unit::fire(int x, int y)
 {
+    Vector2D clampedCoordinates = this->field->clampToBattlefield(x, y);
+    x = clampedCoordinates.x;
+    y = clampedCoordinates.y;
     Grid *targetGrid = this->field->getGrid(x, y);
     bool isSuccessfulHit;
     Unit *targetUnit = targetGrid->occupyingUnit;
@@ -132,6 +136,10 @@ Unit *Unit::look(int x, int y)
     {
         return this->seenUnit;
     }
+
+    Vector2D clampedCoordinates = this->field->clampToBattlefield(x, y);
+    x = clampedCoordinates.x;
+    y = clampedCoordinates.y;
 
     this->defaultModule->look(x, y);
     this->hasLooked = true;
@@ -220,23 +228,9 @@ void Unit::destroy()
 
 bool Unit::updatePos(int x, int y)
 {
-    // Clamping x and y to the battlefield
-    if (x > this->field->map[0].size())
-    {
-        x = this->field->map[0].size();
-    }
-    if (x < 0)
-    {
-        x = 0;
-    }
-    if (y > this->field->map.size())
-    {
-        y = this->field->map.size();
-    }
-    if (y < 0)
-    {
-        y = 0;
-    }
+    Vector2D clampedCoordinates = this->field->clampToBattlefield(x, y);
+    x = clampedCoordinates.x;
+    y = clampedCoordinates.y;
 
     if (this->field->getGrid(x, y)->occupyingUnit != NULL)
     {
