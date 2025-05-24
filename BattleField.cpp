@@ -46,9 +46,31 @@ void Battlefield::displayMap()
 bool Battlefield::isPosValid(int x, int y) // This for restricting the movement when the Robot touches the end of the battlefield range
 {
     if (
-        (y < this->map.size() && y >= 0) || (x < this->map[0].size() && x >= 0))
+        (y < this->map.size() && y >= 0) && (x < this->map[0].size() && x >= 0))
     {
         return true;
     }
     return false;
 };
+
+Vector2D Battlefield::clampToBattlefield(int x, int y) {
+    // Clamping x and y to the battlefield
+    if (x >= this->map[0].size())
+    {
+        x = this->map[0].size() - 1;
+    }
+    if (x < 0)
+    {
+        x = 0;
+    }
+    if (y >= this->map.size())
+    {
+        y = this->map.size() - 1;
+    }
+    if (y < 0)
+    {
+        y = 0;
+    }
+    Vector2D returnValue = {x, y};
+    return returnValue;
+}

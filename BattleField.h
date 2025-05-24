@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include "Types.h"
 using namespace std;
 
 class Unit;
@@ -22,4 +23,5 @@ public:
     void displayMap();
     Grid* getGrid(int x, int y);
     bool isPosValid(int x, int y);
+    Vector2D clampToBattlefield(int x, int y);
 };
