@@ -202,7 +202,7 @@ void Unit::evolve(int evolutionOption)
         break;
     case TRACKER_BOT:
         break;
-    case MAP_VISION_BOT:
+    case SCOUT_BOT:
         break;
     }
     this->messageLog.push_back("Evolving into " + selectedEvolution + ".");

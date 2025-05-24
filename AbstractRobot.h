@@ -1,11 +1,12 @@
 #pragma once
-#define JUMP_BOT 0    // Im Redefining it to an integer so its easy to call for
-#define STEALTH_BOT 1 // your thinking bot later on
-#define THIRTY_SHOT_BOT 2
-#define LONG_SHOT_BOT 3
-#define SEMI_AUTO_BOT 4
-#define TRACKER_BOT 5
-#define MAP_VISION_BOT 6
+#define GENERIC_ROBOT 0
+#define JUMP_BOT 1    // Im Redefining it to an integer so its easy to call for
+#define STEALTH_BOT 2 // your thinking bot later on
+#define THIRTY_SHOT_BOT 3
+#define LONG_SHOT_BOT 4
+#define SEMI_AUTO_BOT 5
+#define TRACKER_BOT 6
+#define SCOUT_BOT 7
 #include <iostream>
 #include "Types.h"
 using namespace std;
