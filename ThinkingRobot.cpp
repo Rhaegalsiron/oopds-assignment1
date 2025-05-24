@@ -76,7 +76,7 @@ void ThinkingRobot::thinkRobot()
             int newX = newCoordinates.first;
             int newY = newCoordinates.second;
             srand(static_cast<unsigned>(time(0)));
-            if (this->unit->seeingModule != NULL && this->unit->seeingModule->robot_type == MAP_VISION_BOT)
+            if (this->unit->seeingModule != NULL && this->unit->seeingModule->robot_type == SCOUT_BOT)
             {
                 int seeIndex = rand() % 2 + 1;
                 switch (seeIndex)

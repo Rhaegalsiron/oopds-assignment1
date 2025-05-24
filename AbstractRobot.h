@@ -23,6 +23,7 @@ public:
     virtual bool useAbility() = 0;
     virtual bool useAbility(int x, int y) = 0;
     virtual bool useAbility(Unit *unit) = 0;
+    virtual void thinkRobot() = 0;
     virtual bool move(int x, int y) = 0;
     virtual bool fire(int x, int y) = 0;
     virtual bool look(int x, int y) = 0;

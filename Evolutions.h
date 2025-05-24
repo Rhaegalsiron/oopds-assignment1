@@ -11,6 +11,7 @@ class Robot : public AbstractRobot
 public:
     int robot_type; // make sure this is set to the defined constant of your special bot
     Unit *unit;
+    virtual void thinkRobot() { return; };
     virtual bool useAbility() { return false; };
     virtual bool useAbility(Unit *unit) { return false; };
     virtual bool useAbility(int x, int y) { return false; };
@@ -25,7 +26,7 @@ public:
 class MoveBot : public Robot
 {
 public:
-    virtual bool useAbility() { return false; };            // for StealthBot
+    virtual bool useAbility() { return false; };             // for StealthBot
     virtual bool useAbility(int x, int y) { return false; }; // for JumpBot
 };
 
