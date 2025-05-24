@@ -7,6 +7,7 @@
 #include "Unit.h"
 #include "BattleField.h"
 #include "Game.h"
+#include "Directions.h"
 using namespace std;
 using namespace std::chrono;
 
@@ -16,4 +17,5 @@ bool test_fire();
 bool test_respawn();
 bool test_evolve();
 bool test_look();
+bool test_move();
 void runTests();

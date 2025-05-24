@@ -7,7 +7,11 @@ JumpBot::JumpBot(Unit *unit)
 
 bool JumpBot::useAbility(int x, int y)
 {
-    if (this->chargesRemaining<= 0)
+    if (this->chargesRemaining <= 0)
+    {
+        return false;
+    }
+    if (this->unit->field->getGrid(x, y)->occupyingUnit != NULL)
     {
         return false;
     }

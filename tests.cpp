@@ -253,9 +253,41 @@ bool test_look()
     }
 
     tUnit1->turnReset();
-    tLookUnit=tUnit1->look(1,0);
-    if(tLookUnit != NULL){
+    tLookUnit = tUnit1->look(1, 0);
+    if (tLookUnit != NULL)
+    {
         log("No unit should be on looked at coordinates.");
+        return false;
+    }
+
+    return true;
+}
+
+bool test_move()
+{
+    Game *game = fixture_createGame();
+    Battlefield *battlefield1 = game->field;
+    Grid *grid = battlefield1->getGrid(0, 0);
+    Unit *tUnit1 = grid->occupyingUnit = new Unit(game, "tUnit1", 0, 0);
+
+    tUnit1->move(Directions::RIGHT);
+    if (battlefield1->getGrid(1, 0)->occupyingUnit != tUnit1)
+    {
+        log("Moved unit was not found in (1,0).");
+        return false;
+    }
+
+    if (grid->occupyingUnit != NULL)
+    {
+        log("Pointer to tUnit1 still in (0,0).");
+        return false;
+    }
+
+    Unit *tUnit2 = grid->occupyingUnit = new Unit(game, "tUnit2", 0, 0);
+    tUnit1->turnReset();
+    if (tUnit1->move(Directions::LEFT))
+    {
+        log("tUnit1 should not be able to move into space occupied by tUnit2.");
         return false;
     }
 
@@ -264,11 +296,12 @@ bool test_look()
 
 void runTests()
 {
-    cout << "Battlefield test " << (test_battlefield() ? "passed" : "failed") << endl;
+    cout << "battlefield test " << (test_battlefield() ? "passed" : "failed") << endl;
     cout << "fire test " << (test_fire() ? "passed" : "failed") << endl;
     cout << "respawn test " << (test_respawn() ? "passed" : "failed") << endl;
     cout << "evolve test " << (test_evolve() ? "passed" : "failed") << endl;
     cout << "look test " << (test_look() ? "passed" : "failed") << endl;
+    cout << "move test " << (test_move() ? "passed" : "failed") << endl;
     cout << testLogs.size() << " test log(s):" << endl;
     testLogs;
     for (int i = 0; i < testLogs.size(); i++)

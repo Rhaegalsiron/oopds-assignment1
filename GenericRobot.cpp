@@ -11,24 +11,28 @@ GenericRobot::GenericRobot(Unit *unit)
 
 bool GenericRobot::move(int x, int y)
 {
-    if (x > 0)
+    int deltaX = abs(this->unit->currentGrid->x - x);
+    int deltaY = abs(this->unit->currentGrid->y - y);
+
+    if (deltaX > 1 && x > this->unit->currentGrid->x)
     {
-        x = 1;
+        x = this->unit->currentGrid->x + 1;
     }
-    else if (x < 0)
+    if (deltaX > 1 & x < this->unit->currentGrid->x)
     {
-        x = -1;
+        x = this->unit->currentGrid->x - 1;
     }
-    if (y > 0)
+
+    if (deltaY > 1 && y > this->unit->currentGrid->y)
     {
-        y = 1;
+        y = this->unit->currentGrid->y + 1;
     }
-    else if (y < 0)
+    if (deltaY > 1 & y < this->unit->currentGrid->y)
     {
-        y = -1;
+        y = this->unit->currentGrid->y - 1;
     }
-    this->unit->updatePos(x, y);
-    return true;
+
+    return this->unit->updatePos(x, y);
 }
 
 bool GenericRobot::fire(int x, int y)
@@ -64,6 +68,6 @@ bool GenericRobot::look(int x, int y)
     {
         y = -1;
     }
-    this->unit->seenUnit = this->unit->field->getGrid(x,y)->occupyingUnit;
+    this->unit->seenUnit = this->unit->field->getGrid(x, y)->occupyingUnit;
     return this->unit->seenUnit != NULL;
 }

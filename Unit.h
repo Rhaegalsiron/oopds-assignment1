@@ -37,12 +37,12 @@ public:
     int shellsRemaining;
     int magazineSize;
     Unit(AbstractGame *game, string name, int initialX, int initialY);
-    void updatePos(int x, int y);
+    bool updatePos(int x, int y);
     vector<int> getEvolutionOptions(); // use this to call for evolution option for your thinking robot
     void evolve(int evolutionOption);
-    void move(int direction);
-    void move(int x, int y);
-    void fire(int x, int y);
+    bool move(int direction);
+    bool move(int x, int y);
+    bool fire(int x, int y);
     void afterFiring(Unit *targetUnit, bool isSuccessfulHit, int x, int y); // call this after using ability of SemiAutoBot/LongShotBot
     Unit *look(int x, int y);
     void destroy();

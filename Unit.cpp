@@ -32,10 +32,10 @@ void Unit::reset()
     this->shellsRemaining = this->magazineSize;
 }
 
-void Unit::move(int direction)
+bool Unit::move(int direction)
 {
-    int newPosY = this->currentGrid->x;
-    int newPosX = this->currentGrid->y;
+    int newPosY = this->currentGrid->y;
+    int newPosX = this->currentGrid->x;
     switch (direction)
     {
     case Directions::STAY:
@@ -67,19 +67,21 @@ void Unit::move(int direction)
     case Directions::UP_LEFT:
         newPosX -= 1;
         newPosY -= 1;
+        break;
     }
 
-    this->move(newPosX, newPosY);
+    return this->move(newPosX, newPosY);
 };
 
-void Unit::move(int x, int y)
+bool Unit::move(int x, int y)
 {
     if (this->hasMoved)
     {
-        return;
+        return true;
     }
-    this->hasMoved = this->defaultModule->move(x, y);
+    bool successfullyMoved = this->hasMoved = this->defaultModule->move(x, y);
     this->messageLog.push_back(this->Name + " moved to coordinates ( " + to_string(x) + "," + to_string(y) + ").");
+    return successfullyMoved;
 };
 
 void Unit::afterFiring(Unit *targetUnit, bool isSuccessfulHit, int x, int y)
@@ -108,19 +110,20 @@ void Unit::afterFiring(Unit *targetUnit, bool isSuccessfulHit, int x, int y)
     }
 }
 
-void Unit::fire(int x, int y)
+bool Unit::fire(int x, int y)
 {
     Grid *targetGrid = this->field->getGrid(x, y);
     bool isSuccessfulHit;
     Unit *targetUnit = targetGrid->occupyingUnit;
     if (this->hasFired)
     {
-        return;
+        return true;
     }
 
     isSuccessfulHit = this->defaultModule->fire(x, y);
 
     this->afterFiring(targetUnit, isSuccessfulHit, x, y);
+    return isSuccessfulHit;
 };
 
 Unit *Unit::look(int x, int y)
@@ -215,7 +218,7 @@ void Unit::destroy()
     this->game->addToRespawn(this);
 };
 
-void Unit::updatePos(int x, int y)
+bool Unit::updatePos(int x, int y)
 {
     // Clamping x and y to the battlefield
     if (x > this->field->map[0].size())
@@ -235,11 +238,18 @@ void Unit::updatePos(int x, int y)
         y = 0;
     }
 
-    if (this->currentGrid != NULL)
+    if (this->field->getGrid(x, y)->occupyingUnit != NULL)
+    {
+        return false;
+    }
+
+    if (this->currentGrid)
     {
         this->currentGrid->occupyingUnit = NULL;
     }
+
     Grid *grid = this->game->field->getGrid(x, y);
     this->currentGrid = grid;
     this->currentGrid->occupyingUnit = this;
+    return true;
 };
