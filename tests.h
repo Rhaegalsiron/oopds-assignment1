@@ -8,6 +8,7 @@
 #include "BattleField.h"
 #include "Game.h"
 #include "Directions.h"
+#include "ThinkingRobot.h"
 using namespace std;
 using namespace std::chrono;
 
@@ -18,4 +19,5 @@ bool test_respawn();
 bool test_evolve();
 bool test_look();
 bool test_move();
+bool test_thinking(); // Moved your test into test 
 void runTests();

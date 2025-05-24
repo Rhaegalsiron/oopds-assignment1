@@ -294,6 +294,28 @@ bool test_move()
     return true;
 }
 
+bool test_thinking()
+{
+    Game *game = fixture_createGame();
+    Battlefield *battlefield1 = game->field;
+
+    Grid *grid = battlefield1->getGrid(0, 0);
+    Unit *tUnit1 = grid->occupyingUnit = new Unit(game, "tUnit1", 0, 0);
+    grid = battlefield1->getGrid(0, 1);
+    Unit *tUnit2 = grid->occupyingUnit = new Unit(game, "tUnit2", 0, 1);
+
+    tUnit1->thinkingModule->thinkRobot(); // if the method is in a module, you need to access the module first.
+    
+    ThinkingRobot *robot1 = new ThinkingRobot(tUnit1);
+
+    for (int i = 0; i < 10 ; i++)
+    {
+        robot1->thinkRobot();
+    }
+    
+    return true;
+}
+
 void runTests()
 {
     cout << "battlefield test " << (test_battlefield() ? "passed" : "failed") << endl;
@@ -302,8 +324,8 @@ void runTests()
     cout << "evolve test " << (test_evolve() ? "passed" : "failed") << endl;
     cout << "look test " << (test_look() ? "passed" : "failed") << endl;
     cout << "move test " << (test_move() ? "passed" : "failed") << endl;
+    cout << "thinking test " << (test_thinking() ? "passed" : "failed") << endl;
     cout << testLogs.size() << " test log(s):" << endl;
-    testLogs;
     for (int i = 0; i < testLogs.size(); i++)
     {
         cout << testLogs[i] << endl;
