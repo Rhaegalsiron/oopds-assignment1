@@ -336,15 +336,27 @@ bool test_thinking()
         tUnit1->thinkingModule->thinkRobot();
         tUnit2->thinkingModule->thinkRobot();
 
-        int tUnit1MoveX = tUnit1->currentGrid->x;
-        int tUnit1MoveY = tUnit1->currentGrid->y;
-        int tUnit2MoveX = tUnit2->currentGrid->x;
-        int tUnit2MoveY = tUnit2->currentGrid->y;
-        
-        
-        log("tUnit1 position: (" + to_string(tUnit1MoveX) + ", " + to_string(tUnit1MoveY) + ")");
-        log("tUnit2 position: (" + to_string(tUnit2MoveX) + ", " + to_string(tUnit2MoveY) + ")");
+        if (tUnit1->isRespawning) {
+            log("tUnit1 is destroyed and respawning.");
+        }
+        else {
+            int tUnit1MoveX = tUnit1->currentGrid->x;
+            int tUnit1MoveY = tUnit1->currentGrid->y;
+            log("tUnit1 position: (" + to_string(tUnit1MoveX) + ", " + to_string(tUnit1MoveY) + ")");
+        }
+
+        if (tUnit2->isRespawning) {
+            log("tUnit2 is destroyed and respawning.");
+        }
+        else {
+            int tUnit2MoveX = tUnit2->currentGrid->x;
+            int tUnit2MoveY = tUnit2->currentGrid->y;
+            log("tUnit2 position: (" + to_string(tUnit2MoveX) + ", " + to_string(tUnit2MoveY) + ")");
+        }
+
         tUnit1->turnReset();
+        tUnit2->turnReset();
+        game->respawnAll();
     }
     cout << "Test end"<< endl;
     return true;

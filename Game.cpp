@@ -26,7 +26,6 @@ void Game::respawnNext()
 
         if (grid->occupyingUnit == NULL)
         {
-            grid->occupyingUnit = unit;
             unit->updatePos(randX, randY);
             unit->isRespawning = false;
             this->respawnQueue.pop_back();
@@ -34,3 +33,10 @@ void Game::respawnNext()
         }
     }
 };
+
+void Game::respawnAll() {
+    int totalInQueue = this->respawnQueue.size();
+    for (int i=0; i < totalInQueue; i++) {
+        this->respawnNext();
+    }
+}

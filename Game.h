@@ -12,4 +12,5 @@ public:
     Game();
     void addToRespawn(Unit *unit);
     void respawnNext();
+    void respawnAll();
 };

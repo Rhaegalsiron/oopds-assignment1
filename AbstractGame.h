@@ -10,4 +10,5 @@ public:
     Battlefield *field;
     virtual void addToRespawn(Unit *unit) = 0;
     virtual void respawnNext() = 0;
+    virtual void respawnAll() = 0;
 };
