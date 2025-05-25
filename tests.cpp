@@ -60,24 +60,24 @@ bool test_battlefield()
     Vector2D clampedCoordinates = battlefield1->clampToBattlefield(-1, -1);
     if (clampedCoordinates.x != 0)
     {
-        log("x is supposed to be clamped to 0.");
+        log("x is supposed to be clamped to 0. x is " + to_string(clampedCoordinates.x) + ".");
         return false;
     }
     if (clampedCoordinates.y != 0)
     {
-        log("y is supposed to be clamped to 0.");
+        log("y is supposed to be clamped to 0. y is " + to_string(clampedCoordinates.y) + ".");
         return false;
     }
 
     clampedCoordinates = battlefield1->clampToBattlefield(battlefield1->map[0].size() + 100, battlefield1->map.size() + 100);
-    if (clampedCoordinates.x != 0)
+    if (clampedCoordinates.x != battlefield1->map[0].size() - 1)
     {
-        log("x is supposed to be clamped to 0.");
+        log("x is supposed to be clamped to " + to_string(battlefield1->map[0].size()) + ". x is " + to_string(clampedCoordinates.x) + ".");
         return false;
     }
-    if (clampedCoordinates.y != 0)
+    if (clampedCoordinates.y != battlefield1->map.size() - 1)
     {
-        log("y is supposed to be clamped to 0.");
+        log("y is supposed to be clamped to " + to_string(battlefield1->map.size()) + ". y is " + to_string(clampedCoordinates.y) + ".");
         return false;
     }
 
@@ -323,28 +323,22 @@ bool test_thinking()
     Game *game = fixture_createGame();
     Battlefield *battlefield1 = game->field;
 
-    Grid *grid = battlefield1->getGrid(0, 0);
-    Unit *tUnit1 = grid->occupyingUnit = new Unit(game, "tUnit1", 0, 0);
-    grid = battlefield1->getGrid(0, 1);
-    Unit *tUnit2 = grid->occupyingUnit = new Unit(game, "tUnit2", 0, 1);
+    Grid *grid = battlefield1->getGrid(3, 3);
+    Unit *tUnit1 = grid->occupyingUnit = new Unit(game, "tUnit1", 3, 3);
+    grid = battlefield1->getGrid(5, 6);
+    Unit *tUnit2 = grid->occupyingUnit = new Unit(game, "tUnit2", 5, 6);
 
     tUnit1->thinkingModule->thinkRobot();
 
-    ThinkingRobot *robot1 = new ThinkingRobot(tUnit1);
-    ThinkingRobot *robot2 = new ThinkingRobot(tUnit2);
-
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 11; i++)
     {
-        robot1->thinkRobot();
-        robot2->thinkRobot();
+        tUnit1->thinkingModule->thinkRobot();
 
         int tUnit1MoveX = tUnit1->currentGrid->x;
         int tUnit1MoveY = tUnit1->currentGrid->y;
-        int tUnit2MoveX = tUnit2->currentGrid->x;
-        int tUnit2MoveY = tUnit2->currentGrid->y;
 
-        cout << "tUnit1 position: (" << tUnit1MoveX << ", " << tUnit1MoveY << ")" << endl;
-        cout << "tUnit2 position: (" << tUnit2MoveX << ", " << tUnit2MoveY << ")" << endl;
+        log("tUnit1 position: (" + to_string(tUnit1MoveX) + ", " + to_string(tUnit1MoveY) + ")");
+        tUnit1->turnReset();
     }
 
     return true;
