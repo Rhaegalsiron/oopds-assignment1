@@ -325,22 +325,28 @@ bool test_thinking()
 
     Grid *grid = battlefield1->getGrid(3, 3);
     Unit *tUnit1 = grid->occupyingUnit = new Unit(game, "tUnit1", 3, 3);
-    grid = battlefield1->getGrid(5, 6);
-    Unit *tUnit2 = grid->occupyingUnit = new Unit(game, "tUnit2", 5, 6);
+    grid = battlefield1->getGrid(3, 4);
+    Unit *tUnit2 = grid->occupyingUnit = new Unit(game, "tUnit2", 3, 4);
 
     tUnit1->thinkingModule->thinkRobot();
-
+    cout << endl;
     for (int i = 0; i < 11; i++)
-    {
+    {   
+        cout << "\nThinking iteration: " << i << endl;
         tUnit1->thinkingModule->thinkRobot();
+        tUnit2->thinkingModule->thinkRobot();
 
         int tUnit1MoveX = tUnit1->currentGrid->x;
         int tUnit1MoveY = tUnit1->currentGrid->y;
-
+        int tUnit2MoveX = tUnit2->currentGrid->x;
+        int tUnit2MoveY = tUnit2->currentGrid->y;
+        
+        
         log("tUnit1 position: (" + to_string(tUnit1MoveX) + ", " + to_string(tUnit1MoveY) + ")");
+        log("tUnit2 position: (" + to_string(tUnit2MoveX) + ", " + to_string(tUnit2MoveY) + ")");
         tUnit1->turnReset();
     }
-
+    cout << "Test end"<< endl;
     return true;
 }
 

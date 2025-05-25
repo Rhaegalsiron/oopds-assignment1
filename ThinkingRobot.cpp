@@ -69,6 +69,7 @@ void ThinkingRobot::thinkRobot()
             else
             {
                 this->unit->move(Direction);
+                cout << "Moving in direction: " << Direction << " from coordinates: (" << x << ", " << y << ")" << endl;
             };
         }
         // LOOK
@@ -106,17 +107,19 @@ void ThinkingRobot::thinkRobot()
             else
             {
                 this->unit->look(newX, newY);
+                cout << "Looking at coordinates: (" << newX << ", " << newY << ")" << endl;
             }
         }
         // FIRE
         else if (action == "fire")
         {
-            if (detectedRobot) // Starts with checking if the robot is detected
-                fire(targetX, targetY);
+            if (detectedRobot){ // Starts with checking if the robot is detected
+            fire(targetX, targetY);
+            cout << "Firing at detected robot at coordinates: (" << targetX << ", " << targetY << ")" << endl;
             detectedRobot = false; // set it back to false after firing
             targetX = -1;          // set targetX and targetY to -1 after firing
             targetY = -1;
-            return; // end here after fire, no need to do the rest. LONG_SHOT_BOT part will be done in Version 2
+            return;} // end here after fire, no need to do the rest. LONG_SHOT_BOT part will be done in Version 2
 
             std::pair<int, int> newCoordinates = randomDirection(x, y);
             int newX = newCoordinates.first;
@@ -138,6 +141,7 @@ void ThinkingRobot::thinkRobot()
             else
             {
                 this->unit->fire(newX, newY);
+                cout << "Firing at coordinates: (" << newX << ", " << newY << ")" << endl;
             };
         }
     }
