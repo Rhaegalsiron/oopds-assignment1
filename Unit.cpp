@@ -11,6 +11,7 @@ Unit::Unit(AbstractGame *game, string name, int initialX, int initialY)
     this->defaultModule = new GenericRobot(this);
     this->thinkingModule = new ThinkingRobot(this);
     this->livesRemaining = 3;
+    this->currentGrid = NULL;
     this->updatePos(initialX, initialY);
     this->reset();
 }
@@ -239,7 +240,7 @@ bool Unit::updatePos(int x, int y)
         return false;
     }
 
-    if (this->currentGrid)
+    if (this->currentGrid != NULL)
     {
         this->currentGrid->occupyingUnit = NULL;
     }
