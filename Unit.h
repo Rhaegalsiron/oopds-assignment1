@@ -24,6 +24,7 @@ protected:
 public:
     vector<string> messageLog;
     string Name;
+    int livesRemaining;
     Battlefield *field;
     Grid *currentGrid;
     AbstractRobot *thinkingModule;

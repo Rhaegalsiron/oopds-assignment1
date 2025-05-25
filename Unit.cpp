@@ -10,11 +10,7 @@ Unit::Unit(AbstractGame *game, string name, int initialX, int initialY)
     this->field = this->game->field;
     this->defaultModule = new GenericRobot(this);
     this->thinkingModule = new ThinkingRobot(this);
-    this->magazineSize = 20;
-    this->canEvolve = false;
-    this->moveModule = NULL;
-    this->fireModule = NULL;
-    this->seeingModule = NULL;
+    this->livesRemaining = 3;
     this->updatePos(initialX, initialY);
     this->reset();
 }
@@ -29,8 +25,13 @@ void Unit::turnReset()
 
 void Unit::reset()
 {
-    this->turnReset();
+    this->canEvolve = false;
+    this->moveModule = NULL;
+    this->fireModule = NULL;
+    this->seeingModule = NULL;
+    this->magazineSize = 20;
     this->shellsRemaining = this->magazineSize;
+    this->turnReset();
 }
 
 bool Unit::move(int direction)
@@ -222,6 +223,7 @@ void Unit::destroy()
     this->currentGrid->occupyingUnit = NULL;
     this->currentGrid = NULL;
     this->messageLog.push_back(this->Name + " is destroyed.");
+    this->livesRemaining--;
     this->reset();
     this->game->addToRespawn(this);
 };

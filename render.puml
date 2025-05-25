@@ -1,0 +1,18 @@
+@startuml "render"
+
+start
+
+:print turn headers;
+
+repeat
+    :game->units->renderMessageLogs();
+repeat while(all unit logs printed?) is (false)
+->true;
+
+:game->renderBattlefield();
+
+:print seperators;
+
+end
+
+@enduml

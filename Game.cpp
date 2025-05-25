@@ -7,6 +7,9 @@ Game::Game()
 
 void Game::addToRespawn(Unit *unit)
 {
+    if (unit->livesRemaining == 0) {
+        return;
+    }
     this->respawnQueue.insert(this->respawnQueue.begin(), unit);
 };
 

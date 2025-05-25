@@ -1,0 +1,40 @@
+@startuml "process"
+
+start
+
+:parse configurations;
+:game = new Game(config params);
+:field = new Battlefield(config params);
+
+repeat
+    :unit = new Unit(config params);
+    :game->addUnit(unit);
+    if (position is random) then (true)
+        :game->addToRespawn(unit);
+        :game->respawnNext();
+    else (false)
+        :unit->updatePos(x, y);
+    endif
+repeat while (all units instantiated?) is (false)
+->true;
+
+:game->render();
+
+repeat
+    repeat
+        :unit->turnReset();
+    repeat while (all units reset?) is (false)
+    ->true;
+
+    repeat
+        :unit->takeAction();
+    repeat while (all units took action) is (false)
+    ->true;
+
+    :game->render();
+repeat while (simulation limit reached?) is (false)
+->true;
+
+end
+
+@enduml
