@@ -6,7 +6,8 @@
 #include <vector>
 
 ThinkingRobot::ThinkingRobot(Unit *unit)
-{
+{   
+    
     this->unit = unit;
     targetX = -1;
     targetY = -1;

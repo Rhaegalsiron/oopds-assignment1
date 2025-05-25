@@ -17,6 +17,7 @@ class ThinkingRobot : public Robot
 public:
     ThinkingRobot(Unit *unit); 
     int targetX, targetY;
+    bool hasMoved;
     vector<vector<string>> actionsOrder;
 
     void thinkRobot();

@@ -307,10 +307,43 @@ bool test_thinking()
     tUnit1->thinkingModule->thinkRobot(); // if the method is in a module, you need to access the module first.
     
     ThinkingRobot *robot1 = new ThinkingRobot(tUnit1);
+    ThinkingRobot *robot2 = new ThinkingRobot(tUnit2);
 
     for (int i = 0; i < 10 ; i++)
     {
         robot1->thinkRobot();
+        robot2->thinkRobot();
+        if (robot1->hasMoved)
+        {
+            log("Robot1 has moved.");
+        }
+        else
+        {
+            log("Robot1 has not moved.");
+        }
+
+        if (robot2->hasMoved)
+        {
+            log("Robot2 has moved.");
+        }
+        else
+        {
+            log("Robot2 has not moved.");
+        }
+
+        // Check if both robots moved to the same coordinates
+        if (robot1->hasMoved && robot2->hasMoved)
+        {
+            if (robot1->targetX == robot2->targetX && robot1->targetY == robot2->targetY)
+            {
+                log("Both robots moved to the same coordinates.");
+                return false;
+            }
+        }
+        {
+            /* code */
+        }
+        
     }
     
     return true;
