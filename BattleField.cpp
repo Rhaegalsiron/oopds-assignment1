@@ -1,6 +1,7 @@
 #include "BattleField.h"
 
-Grid::Grid(int x, int y) {
+Grid::Grid(int x, int y)
+{
     this->x = x;
     this->y = y;
     this->occupyingUnit = NULL;
@@ -53,24 +54,28 @@ bool Battlefield::isPosValid(int x, int y) // This for restricting the movement 
     return false;
 };
 
-Vector2D Battlefield::clampToBattlefield(int x, int y) {
+Vector2D Battlefield::clampToBattlefield(int x, int y)
+{
     // Clamping x and y to the battlefield
-    if (x >= this->map[0].size())
-    {
-        x = this->map[0].size() - 1;
-    }
+    int newX = x, newY = y;
     if (x < 0)
     {
-        x = 0;
+        newX = 0;
     }
-    if (y >= this->map.size())
+    else if (x >= this->map[0].size())
     {
-        y = this->map.size() - 1;
+        newX = this->map[0].size() - 1;
     }
+
     if (y < 0)
     {
-        y = 0;
+        newY = 0;
     }
-    Vector2D returnValue = {x, y};
+    else if (y >= this->map.size())
+    {
+        newY = this->map.size() - 1;
+    }
+
+    Vector2D returnValue = {newX, newY};
     return returnValue;
 }

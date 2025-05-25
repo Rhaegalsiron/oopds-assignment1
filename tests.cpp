@@ -57,6 +57,30 @@ bool test_battlefield()
         return false;
     }
 
+    Vector2D clampedCoordinates = battlefield1->clampToBattlefield(-1, -1);
+    if (clampedCoordinates.x != 0)
+    {
+        log("x is supposed to be clamped to 0.");
+        return false;
+    }
+    if (clampedCoordinates.y != 0)
+    {
+        log("y is supposed to be clamped to 0.");
+        return false;
+    }
+
+    clampedCoordinates = battlefield1->clampToBattlefield(battlefield1->map[0].size() + 100, battlefield1->map.size() + 100);
+    if (clampedCoordinates.x != 0)
+    {
+        log("x is supposed to be clamped to 0.");
+        return false;
+    }
+    if (clampedCoordinates.y != 0)
+    {
+        log("y is supposed to be clamped to 0.");
+        return false;
+    }
+
     return true;
 }
 
@@ -304,16 +328,16 @@ bool test_thinking()
     grid = battlefield1->getGrid(0, 1);
     Unit *tUnit2 = grid->occupyingUnit = new Unit(game, "tUnit2", 0, 1);
 
-    tUnit1->thinkingModule->thinkRobot(); 
-    
+    tUnit1->thinkingModule->thinkRobot();
+
     ThinkingRobot *robot1 = new ThinkingRobot(tUnit1);
     ThinkingRobot *robot2 = new ThinkingRobot(tUnit2);
 
-    for (int i = 0; i < 10 ; i++)
+    for (int i = 0; i < 10; i++)
     {
         robot1->thinkRobot();
         robot2->thinkRobot();
-        
+
         int tUnit1MoveX = tUnit1->currentGrid->x;
         int tUnit1MoveY = tUnit1->currentGrid->y;
         int tUnit2MoveX = tUnit2->currentGrid->x;
@@ -322,7 +346,7 @@ bool test_thinking()
         cout << "tUnit1 position: (" << tUnit1MoveX << ", " << tUnit1MoveY << ")" << endl;
         cout << "tUnit2 position: (" << tUnit2MoveX << ", " << tUnit2MoveY << ")" << endl;
     }
-    
+
     return true;
 }
 
