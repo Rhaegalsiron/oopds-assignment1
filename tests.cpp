@@ -304,7 +304,7 @@ bool test_thinking()
     grid = battlefield1->getGrid(0, 1);
     Unit *tUnit2 = grid->occupyingUnit = new Unit(game, "tUnit2", 0, 1);
 
-    tUnit1->thinkingModule->thinkRobot(); // if the method is in a module, you need to access the module first.
+    tUnit1->thinkingModule->thinkRobot(); 
     
     ThinkingRobot *robot1 = new ThinkingRobot(tUnit1);
     ThinkingRobot *robot2 = new ThinkingRobot(tUnit2);
@@ -313,24 +313,14 @@ bool test_thinking()
     {
         robot1->thinkRobot();
         robot2->thinkRobot();
-        if (robot1->hasMoved == true)
-        {
-            cout << "Robot1 has moved." << endl;
-        }
-        else
-        {
-            cout << "Robot1 has not moved." << endl;
-        }
+        
+        int tUnit1MoveX = tUnit1->currentGrid->x;
+        int tUnit1MoveY = tUnit1->currentGrid->y;
+        int tUnit2MoveX = tUnit2->currentGrid->x;
+        int tUnit2MoveY = tUnit2->currentGrid->y;
 
-        if (robot1->hasFired == true)
-        {
-            cout << "Robot2 has fire." << endl;
-        }
-        else
-        {
-            cout << "Robot2 has not fire." << endl;
-        }
-
+        cout << "tUnit1 position: (" << tUnit1MoveX << ", " << tUnit1MoveY << ")" << endl;
+        cout << "tUnit2 position: (" << tUnit2MoveX << ", " << tUnit2MoveY << ")" << endl;
     }
     
     return true;
