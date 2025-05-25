@@ -8,6 +8,7 @@ Game::Game()
 
 void Game::addToRespawn(Unit *unit)
 {
+    unit->isRespawning = true;
     if (unit->livesRemaining == 0) {
         return;
     }
@@ -27,6 +28,7 @@ void Game::respawnNext()
         {
             grid->occupyingUnit = unit;
             unit->updatePos(randX, randY);
+            unit->isRespawning = false;
             this->respawnQueue.pop_back();
             break;
         }

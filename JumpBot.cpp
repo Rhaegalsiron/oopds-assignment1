@@ -7,6 +7,10 @@ JumpBot::JumpBot(Unit *unit)
 
 bool JumpBot::useAbility(int x, int y)
 {
+    if (this->unit->isRespawning) {
+        return false;
+    }
+
     if (this->chargesRemaining <= 0)
     {
         return false;

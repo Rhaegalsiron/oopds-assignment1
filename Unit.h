@@ -32,6 +32,7 @@ public:
     AbstractRobot *fireModule;
     AbstractRobot *seeingModule;
     Unit *seenUnit;
+    bool isRespawning;
     bool canEvolve;
     bool hasMoved;
     bool hasFired;

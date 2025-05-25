@@ -8,6 +8,10 @@ GenericRobot::GenericRobot(Unit *unit)
 
 bool GenericRobot::move(int x, int y)
 {
+    if (this->unit->isRespawning) {
+        return false;
+    }
+
     int deltaX = abs(this->unit->currentGrid->x - x);
     int deltaY = abs(this->unit->currentGrid->y - y);
 
@@ -34,6 +38,10 @@ bool GenericRobot::move(int x, int y)
 
 bool GenericRobot::fire(int x, int y)
 {
+    if (this->unit->isRespawning) {
+        return false;
+    }
+
     Grid *targetGrid = this->unit->field->getGrid(x, y);
     if (targetGrid->occupyingUnit != NULL)
     {
@@ -49,6 +57,10 @@ bool GenericRobot::fire(int x, int y)
 
 bool GenericRobot::look(int x, int y)
 {
+    if (this->unit->isRespawning) {
+        return false;
+    }
+
     int deltaX = abs(this->unit->currentGrid->x - x);
     int deltaY = abs(this->unit->currentGrid->y - y);
 

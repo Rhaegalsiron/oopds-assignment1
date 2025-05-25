@@ -12,8 +12,9 @@ Unit::Unit(AbstractGame *game, string name, int initialX, int initialY)
     this->thinkingModule = new ThinkingRobot(this);
     this->livesRemaining = 3;
     this->currentGrid = NULL;
-    this->updatePos(initialX, initialY);
+    this->isRespawning = false;
     this->reset();
+    this->updatePos(initialX, initialY);
 }
 
 void Unit::turnReset()
@@ -32,6 +33,10 @@ void Unit::reset()
     this->seeingModule = NULL;
     this->magazineSize = 20;
     this->shellsRemaining = this->magazineSize;
+    if (this->currentGrid != NULL) {
+        this->currentGrid->occupyingUnit = NULL;
+    }
+    this->currentGrid = NULL;
     this->turnReset();
 }
 
@@ -221,8 +226,6 @@ void Unit::evolve(int evolutionOption)
 
 void Unit::destroy()
 {
-    this->currentGrid->occupyingUnit = NULL;
-    this->currentGrid = NULL;
     this->messageLog.push_back(this->Name + " is destroyed.");
     this->livesRemaining--;
     this->reset();
