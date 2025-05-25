@@ -11,7 +11,7 @@ void log(string message)
 Game *fixture_createGame()
 {
     Game *game = new Game();
-    int width = 3, height = 3;
+    int width = 30, height = 30;
     game->field->generateMap(width, height);
     return game;
 };
