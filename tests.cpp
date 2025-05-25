@@ -315,34 +315,36 @@ bool test_thinking()
         robot2->thinkRobot();
         if (robot1->hasMoved)
         {
-            log("Robot1 has moved.");
+            cout << "Robot1 has moved." << endl;
         }
         else
         {
-            log("Robot1 has not moved.");
+            cout << "Robot1 has not moved." << endl;
         }
 
         if (robot2->hasMoved)
         {
-            log("Robot2 has moved.");
+            cout << "Robot2 has moved." << endl;
         }
         else
         {
-            log("Robot2 has not moved.");
+            cout << "Robot2 has not moved." << endl;
         }
 
-        // Check if both robots moved to the same coordinates
+        
         if (robot1->hasMoved && robot2->hasMoved)
         {
-            if (robot1->targetX == robot2->targetX && robot1->targetY == robot2->targetY)
+            if (robot1->hasMoved == false || robot2->hasMoved == false)
             {
-                log("Both robots moved to the same coordinates.");
+                cout << "One of the robots has not moved." << endl;
+                return false;
+            }
+            {
+                cout << "Both robots moved to the same coordinates." << endl;
                 return false;
             }
         }
-        {
-            /* code */
-        }
+
         
     }
     
