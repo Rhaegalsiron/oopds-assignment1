@@ -18,6 +18,7 @@ public:
     ThinkingRobot(Unit *unit); 
     int targetX, targetY;
     bool hasMoved;
+    bool hasFired;
     vector<vector<string>> actionsOrder;
 
     void thinkRobot();

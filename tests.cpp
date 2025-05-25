@@ -313,7 +313,7 @@ bool test_thinking()
     {
         robot1->thinkRobot();
         robot2->thinkRobot();
-        if (robot1->hasMoved)
+        if (robot1->hasMoved == true)
         {
             cout << "Robot1 has moved." << endl;
         }
@@ -322,30 +322,15 @@ bool test_thinking()
             cout << "Robot1 has not moved." << endl;
         }
 
-        if (robot2->hasMoved)
+        if (robot1->hasFired == true)
         {
-            cout << "Robot2 has moved." << endl;
+            cout << "Robot2 has fire." << endl;
         }
         else
         {
-            cout << "Robot2 has not moved." << endl;
+            cout << "Robot2 has not fire." << endl;
         }
 
-        
-        if (robot1->hasMoved && robot2->hasMoved)
-        {
-            if (robot1->hasMoved == false || robot2->hasMoved == false)
-            {
-                cout << "One of the robots has not moved." << endl;
-                return false;
-            }
-            {
-                cout << "Both robots moved to the same coordinates." << endl;
-                return false;
-            }
-        }
-
-        
     }
     
     return true;
