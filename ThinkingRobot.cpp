@@ -6,8 +6,8 @@
 #include <vector>
 
 ThinkingRobot::ThinkingRobot(Unit *unit)
-{   
-    
+{
+
     this->unit = unit;
     targetX = -1;
     targetY = -1;
@@ -36,9 +36,8 @@ void ThinkingRobot::thinkRobot()
             // hasMoved = false; //this part i tak faham // i will do this in version 2
             // if (this->unit->hasMoved = true)
             // TODO : Implement move.
-            srand(static_cast<unsigned>(time(0)));
             int Direction = rand() % 9;
-            if (this->unit->moveModule != NULL && this->unit->moveModule->robot_type == STEALTH_BOT) 
+            if (this->unit->moveModule != NULL && this->unit->moveModule->robot_type == STEALTH_BOT)
             {
                 int moveIndex = rand() % 2 + 1;
                 switch (moveIndex)
@@ -50,19 +49,21 @@ void ThinkingRobot::thinkRobot()
                     this->unit->move(Direction);
                     break;
                 }
-            } else if(this->unit->moveModule != NULL && this->unit->moveModule->robot_type == JUMP_BOT){
+            }
+            else if (this->unit->moveModule != NULL && this->unit->moveModule->robot_type == JUMP_BOT)
+            {
                 int moveIndex = rand() % 2 + 1;
                 std::pair<int, int> newCoordinates = randomDirection(x, y); // TODO : Implement JUMP for JUMPBOT in version 2.
-                int newX = newCoordinates.first; //temporary
-                int newY = newCoordinates.second; //temporary
+                int newX = newCoordinates.first;                            // temporary
+                int newY = newCoordinates.second;                           // temporary
                 switch (moveIndex)
                 {
-                    case 1:
-                        this->unit->moveModule->useAbility(newX, newY);
-                        break;
-                    case 2:
-                        this->unit->move(Direction);
-                        break;
+                case 1:
+                    this->unit->moveModule->useAbility(newX, newY);
+                    break;
+                case 2:
+                    this->unit->move(Direction);
+                    break;
                 }
             }
             else
@@ -76,7 +77,6 @@ void ThinkingRobot::thinkRobot()
             std::pair<int, int> newCoordinates = randomDirection(x, y);
             int newX = newCoordinates.first;
             int newY = newCoordinates.second;
-            srand(static_cast<unsigned>(time(0)));
             if (this->unit->seeingModule != NULL && this->unit->seeingModule->robot_type == SCOUT_BOT)
             {
                 int seeIndex = rand() % 2 + 1;
@@ -122,7 +122,6 @@ void ThinkingRobot::thinkRobot()
             int newX = newCoordinates.first;
             int newY = newCoordinates.second;
 
-            srand(static_cast<unsigned>(time(0)));
             if (this->unit->fireModule != NULL && this->unit->fireModule->robot_type != LONG_SHOT_BOT && this->unit->fireModule->robot_type != SEMI_AUTO_BOT)
             {
                 int fireIndex = rand() % 2 + 1;

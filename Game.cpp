@@ -3,6 +3,7 @@
 Game::Game()
 {
     this->field = new Battlefield();
+    srand(static_cast<unsigned>(time(0)));
 };
 
 void Game::addToRespawn(Unit *unit)
