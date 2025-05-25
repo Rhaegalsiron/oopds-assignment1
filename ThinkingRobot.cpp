@@ -22,7 +22,12 @@ ThinkingRobot::ThinkingRobot(Unit *unit)
 }
 
 void ThinkingRobot::thinkRobot()
-{
+{   
+    if (this->unit->isRespawning)
+    {
+        cout << "Unit is respawning, skipping thinking." << endl;
+        return;
+    }
     int choice = rand() % actionsOrder.size();
     vector<string> actions = actionsOrder[choice];
     int x = this->unit->currentGrid->x;
