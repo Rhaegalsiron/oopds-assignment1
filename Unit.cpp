@@ -1,4 +1,5 @@
 #include "Unit.h"
+#include "Directions.h"
 #include "GenericRobot.h"
 #include "ThinkingRobot.h"
 #include "JumpBot.h"
@@ -23,6 +24,7 @@ void Unit::turnReset()
     this->hasFired = false;
     this->hasLooked = false;
     this->seenUnit = NULL;
+    this->messageLog.clear();
 }
 
 void Unit::reset()
@@ -33,7 +35,8 @@ void Unit::reset()
     this->seeingModule = NULL;
     this->magazineSize = 20;
     this->shellsRemaining = this->magazineSize;
-    if (this->currentGrid != NULL) {
+    if (this->currentGrid != NULL)
+    {
         this->currentGrid->occupyingUnit = NULL;
     }
     this->currentGrid = NULL;
@@ -46,33 +49,33 @@ bool Unit::move(int direction)
     int newPosX = this->currentGrid->x;
     switch (direction)
     {
-    case Directions::STAY:
+    case DIRECTION_STAY:
         break;
-    case Directions::UP:
+    case DIRECTION_UP:
         newPosY -= 1;
         break;
-    case Directions::UP_RIGHT:
+    case DIRECTION_UP_RIGHT:
         newPosY -= 1;
         newPosX += 1;
         break;
-    case Directions::RIGHT:
+    case DIRECTION_RIGHT:
         newPosX += 1;
         break;
-    case Directions::DOWN_RIGHT:
+    case DIRECTION_DOWN_RIGHT:
         newPosX += 1;
         newPosY -= 1;
         break;
-    case Directions::DOWN:
+    case DIRECTION_DOWN:
         newPosY += 1;
         break;
-    case Directions::DOWN_LEFT:
+    case DIRECTION_DOWN_LEFT:
         newPosY += 1;
         newPosX -= 1;
         break;
-    case Directions::LEFT:
+    case DIRECTION_LEFT:
         newPosX -= 1;
         break;
-    case Directions::UP_LEFT:
+    case DIRECTION_UP_LEFT:
         newPosX -= 1;
         newPosY -= 1;
         break;
@@ -88,7 +91,7 @@ bool Unit::move(int x, int y)
         return true;
     }
     bool successfullyMoved = this->hasMoved = this->defaultModule->move(x, y);
-    this->messageLog.push_back(this->Name + " moved to coordinates ( " + to_string(x) + "," + to_string(y) + ").");
+    this->log(this->Name + " moved to coordinates (" + to_string(x) + "," + to_string(y) + ").");
     return successfullyMoved;
 };
 
@@ -96,24 +99,24 @@ void Unit::afterFiring(Unit *targetUnit, bool isSuccessfulHit, int x, int y)
 {
     if (targetUnit == NULL)
     {
-        this->messageLog.push_back(this->Name + " fired at coordinates ( " + to_string(x) + "," + to_string(y) + ") but nothing was there.");
+        this->log(this->Name + " fired at coordinates (" + to_string(x) + "," + to_string(y) + ") but nothing was there.");
     }
 
     if (targetUnit != NULL && isSuccessfulHit)
     {
         this->canEvolve = true;
-        this->messageLog.push_back(this->Name + " fired at coordinates ( " + to_string(x) + "," + to_string(y) + ") and hit " + targetUnit->Name + ".");
+        this->log(this->Name + " fired at coordinates (" + to_string(x) + "," + to_string(y) + ") and hit " + targetUnit->Name + ".");
     }
 
     if (targetUnit != NULL && !isSuccessfulHit)
     {
-        this->messageLog.push_back(this->Name + " fired at coordinates ( " + to_string(x) + "," + to_string(y) + ") and missed.");
+        this->log(this->Name + " fired at coordinates (" + to_string(x) + "," + to_string(y) + ") and missed.");
     }
 
     this->shellsRemaining--;
     if (this->shellsRemaining == 0)
     {
-        this->messageLog.push_back(this->Name + " has emptied its magazine.");
+        this->log(this->Name + " has emptied its magazine.");
         this->destroy();
     }
 }
@@ -151,7 +154,7 @@ Unit *Unit::look(int x, int y)
     this->defaultModule->look(x, y);
     this->hasLooked = true;
 
-    string message = this->Name + " looked at coordinates ( " + to_string(x) + "," + to_string(y) + ")";
+    string message = this->Name + " looked at coordinates (" + to_string(x) + "," + to_string(y) + ")";
 
     if (this->seenUnit == NULL)
     {
@@ -162,7 +165,7 @@ Unit *Unit::look(int x, int y)
         message += " and saw " + this->seenUnit->Name;
     }
 
-    this->messageLog.push_back(message);
+    this->log(message);
 
     return this->seenUnit;
 };
@@ -220,13 +223,13 @@ void Unit::evolve(int evolutionOption)
     case SCOUT_BOT:
         break;
     }
-    this->messageLog.push_back("Evolving into " + selectedEvolution + ".");
+    this->log("Evolving into " + selectedEvolution + ".");
     this->canEvolve = false;
 };
 
 void Unit::destroy()
 {
-    this->messageLog.push_back(this->Name + " is destroyed.");
+    this->log(this->Name + " is destroyed.");
     this->livesRemaining--;
     this->reset();
     this->game->addToRespawn(this);
@@ -251,9 +254,11 @@ bool Unit::updatePos(int x, int y)
     Grid *grid = this->game->field->getGrid(x, y);
     this->currentGrid = grid;
     this->currentGrid->occupyingUnit = this;
-    cout << "coordinates of " << this->Name << " : " << "("<< x << ", " << y << ")" << endl;
     return true;
 };
 
-
-
+void Unit::log(string message)
+{
+    this->messageLog.push_back(message);
+    this->game->log(message);
+}

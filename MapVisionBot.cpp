@@ -28,11 +28,11 @@ bool MapVisionBot::lookSpecial(int x, int y)
     if (targetGrid->occupyingUnit != nullptr)
     {
         Unit *targetUnit = targetGrid->occupyingUnit;
-        cout << "Unit found at (" << x << ", " << y << "): " << targetUnit->Name << endl;
+        cout << "Unit found at (" << x << "," << y << "): " << targetUnit->Name << endl;
     }
     else
     {
-        cout << "No unit found at (" << x << ", " << y << ")." << endl;
+        cout << "No unit found at (" << x << "," << y << ")." << endl;
     }
 
     // Lower mapVisionCount after use

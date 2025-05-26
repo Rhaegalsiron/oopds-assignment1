@@ -19,7 +19,6 @@ public:
 class Battlefield
 {
 public:
-    int unitCount;
     vector<vector<Grid *>> map; // 2d vector array
     void generateMap(int sizeX, int sizeY);
     void displayMap();

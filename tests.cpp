@@ -294,7 +294,7 @@ bool test_move()
     Grid *grid = battlefield1->getGrid(0, 0);
     Unit *tUnit1 = grid->occupyingUnit = new Unit(game, "tUnit1", 0, 0);
 
-    tUnit1->move(Directions::RIGHT);
+    tUnit1->move(DIRECTION_RIGHT);
     if (battlefield1->getGrid(1, 0)->occupyingUnit != tUnit1)
     {
         log("Moved unit was not found in (1,0).");
@@ -309,7 +309,7 @@ bool test_move()
 
     Unit *tUnit2 = grid->occupyingUnit = new Unit(game, "tUnit2", 0, 0);
     tUnit1->turnReset();
-    if (tUnit1->move(Directions::LEFT))
+    if (tUnit1->move(DIRECTION_LEFT))
     {
         log("tUnit1 should not be able to move into space occupied by tUnit2.");
         return false;

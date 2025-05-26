@@ -27,6 +27,7 @@ Grid *Battlefield::getGrid(int x, int y)
 
 void Battlefield::unitCounter()
 {
+    int unitCount = 0;
     for (int y = 0; y < map.size(); y++)
     {
         for (int x = 0; x < map[0].size(); x++)

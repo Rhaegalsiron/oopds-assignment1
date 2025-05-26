@@ -10,9 +10,12 @@ class Game : public AbstractGame
 {
 public:
     Game();
+    void addToGame(Unit *unit);
     void addToRespawn(Unit *unit);
     void respawnNext();
     void respawnAll();
     void renderBattleField();
-    Battlefield *Battlefield1 = field;
+    void executeTurn();
+    void endTurn();
+    void log(string message);
 };

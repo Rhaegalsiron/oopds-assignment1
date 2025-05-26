@@ -3,7 +3,6 @@
 #include <string>
 #include "AbstractGame.h"
 #include "BattleField.h"
-#include "Directions.h"
 #include "AbstractRobot.h"
 #include "Evolutions.h"
 using namespace std;
@@ -51,4 +50,5 @@ public:
     void destroy();
     void reset();
     void turnReset();
+    void log(string message);
 };
