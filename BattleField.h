@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include "Types.h"
+
 using namespace std;
 
 class Unit;
@@ -18,10 +19,12 @@ public:
 class Battlefield
 {
 public:
-    vector<vector<Grid*>> map; // 2d vector array
+    int unitCount;
+    vector<vector<Grid *>> map; // 2d vector array
     void generateMap(int sizeX, int sizeY);
     void displayMap();
-    Grid* getGrid(int x, int y);
+    Grid *getGrid(int x, int y);
     bool isPosValid(int x, int y);
+    void unitCounter();
     Vector2D clampToBattlefield(int x, int y);
 };

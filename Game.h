@@ -13,4 +13,6 @@ public:
     void addToRespawn(Unit *unit);
     void respawnNext();
     void respawnAll();
+    void renderBattleField();
+    Battlefield *Battlefield1 = field;
 };

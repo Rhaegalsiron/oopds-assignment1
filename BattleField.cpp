@@ -1,4 +1,5 @@
 #include "BattleField.h"
+#include "Unit.h"
 
 Grid::Grid(int x, int y)
 {
@@ -24,7 +25,7 @@ Grid *Battlefield::getGrid(int x, int y)
     return this->map[y][x];
 };
 
-void Battlefield::displayMap()
+void Battlefield::unitCounter()
 {
     for (int y = 0; y < map.size(); y++)
     {
@@ -33,7 +34,25 @@ void Battlefield::displayMap()
             Grid *currentGrid = this->getGrid(x, y);
             if (currentGrid->occupyingUnit != NULL)
             {
-                cout << 'R' << " ";
+                unitCount++;
+            }
+        }
+    }
+    cout << "Robots: " << unitCount << endl;
+}
+
+void Battlefield::displayMap()
+{
+    cout << "M by N: " << this->map.size() << "X" << this->map[0].size() << endl;
+    unitCounter();
+    for (int y = 0; y < map.size(); y++)
+    {
+        for (int x = 0; x < map[0].size(); x++)
+        {
+            Grid *currentGrid = this->getGrid(x, y);
+            if (currentGrid->occupyingUnit != NULL)
+            {
+                cout << currentGrid->occupyingUnit->Name[0] << " ";
             }
             else
                 cout << "*" << " ";

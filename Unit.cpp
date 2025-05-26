@@ -251,5 +251,9 @@ bool Unit::updatePos(int x, int y)
     Grid *grid = this->game->field->getGrid(x, y);
     this->currentGrid = grid;
     this->currentGrid->occupyingUnit = this;
+    cout << "coordinates of " << this->Name << " : " << "("<< x << ", " << y << ")" << endl;
     return true;
 };
+
+
+

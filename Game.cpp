@@ -9,7 +9,8 @@ Game::Game()
 void Game::addToRespawn(Unit *unit)
 {
     unit->isRespawning = true;
-    if (unit->livesRemaining == 0) {
+    if (unit->livesRemaining == 0)
+    {
         return;
     }
     this->respawnQueue.insert(this->respawnQueue.begin(), unit);
@@ -34,9 +35,20 @@ void Game::respawnNext()
     }
 };
 
-void Game::respawnAll() {
+void Game::respawnAll()
+{
     int totalInQueue = this->respawnQueue.size();
-    for (int i=0; i < totalInQueue; i++) {
+    for (int i = 0; i < totalInQueue; i++)
+    {
         this->respawnNext();
     }
 }
+
+void Game::renderBattleField()
+{
+    Battlefield *battlefield1 = field;
+    battlefield1->displayMap();
+    
+}
+
+
