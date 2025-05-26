@@ -155,11 +155,44 @@ void ThinkingRobot::thinkRobot()
 std::pair<int, int> ThinkingRobot::randomDirection(int x, int y) // TODO : Implement +3 for LONG_SHOT_BOT in version 2.
 {
     vector<pair<int, int>> directions = {
-        {x - 1, y}, {x + 1, y}, {x, y - 1}, {x, y + 1}, {x - 1, y - 1}, {x - 1, y + 1}, {x + 1, y - 1}, {x + 1, y + 1}};
-
+        {x - 1, y}, {x + 1, y}, {x, y - 1}, {x, y + 1}, {x - 1, y - 1}, {x - 1, y + 1}, {x + 1, y - 1}, {x + 1, y + 1}}; //It will not fire at itself
     vector<pair<int, int>> validDirections;
     vector<pair<int, int>> validTargets;
+    
+    vector<pair<int, int>> directionsLong;
+    vector<pair<int, int>> validLongDirections;
+    vector<pair<int, int>> validLongTargets;
 
+    //Loop for +- 3 for LONG_SHOT_BOT
+    for (int dx = -3; dx <= 3; ++dx)
+    {
+        for (int dy = -3; dy <= 3; ++dy)
+        {
+            if (dx == 0 && dy == 0) continue; // Skip the current position, it will not fire at itself
+            int longX = x + dx;
+            int longY = y + dy;
+            directionsLong.push_back({longX, longY});
+        }
+    }
+
+    // Check for valid positions in the directionsLong vector for LONG_SHOT_BOT
+    for (const auto &dir : directionsLong)
+    {
+        if (this->unit->field->isPosValid(dir.first, dir.second))
+        {
+            Grid *targetGrid = this->unit->field->getGrid(dir.first, dir.second);
+            if (targetGrid->occupyingUnit != NULL)
+            {
+                validLongTargets.push_back(dir);
+            }
+            else
+            {
+                detectedRobot = false;
+            }
+            validLongDirections.push_back(dir);
+        }
+    }
+    // Check for valid positions in the directions for SEMI_AUTO_BOT and THIRTY_SHOT_BOT
     for (const auto &dir : directions)
     {
         if (this->unit->field->isPosValid(dir.first, dir.second))
@@ -177,9 +210,31 @@ std::pair<int, int> ThinkingRobot::randomDirection(int x, int y) // TODO : Imple
         }
     }
 
-    int randomIndex = rand() % validDirections.size();
-    std::pair<int, int> chosenDirection = validDirections[randomIndex];
-    if (std::find(validTargets.begin(), validTargets.end(), chosenDirection) != validTargets.end())
+    std::pair<int, int> chosenDirection;
+    if (this->unit->fireModule != NULL && this->unit->fireModule->robot_type == LONG_SHOT_BOT)
+    {
+        int randomIndex = rand() % validLongDirections.size();
+        chosenDirection = validLongDirections[randomIndex];
+    } else {
+        int randomIndex = rand() % validDirections.size();
+        chosenDirection = validDirections[randomIndex];
+    }
+    
+    if (this->unit->fireModule != NULL && this->unit->fireModule->robot_type == LONG_SHOT_BOT){
+        if (std::find(validLongTargets.begin(), validLongTargets.end(), chosenDirection) != validLongTargets.end())
+        {
+            targetX = chosenDirection.first;
+            targetY = chosenDirection.second;
+            detectedRobot = true;
+        }
+        else
+        {
+            detectedRobot = false;
+            targetX = -1;
+            targetY = -1;
+        }
+    }
+    else if (std::find(validTargets.begin(), validTargets.end(), chosenDirection) != validTargets.end())
     {
         targetX = chosenDirection.first;
         targetY = chosenDirection.second;
