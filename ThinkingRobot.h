@@ -22,7 +22,7 @@ public:
     vector<vector<string>> actionsOrder;
 
     void thinkRobot();
-    pair<int, int> randomDirection(int x, int y);
+    pair<int, int> randomDirection(int x, int y, bool forExtendedRange);
 
 private:
     bool detectedRobot;
