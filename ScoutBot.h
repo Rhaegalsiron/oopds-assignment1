@@ -14,7 +14,7 @@ class ScoutBot : public SeeingBot
         int mapVisionCount;
 
     public: 
-        MapVisionBot(Unit *unit);
+        ScoutBot(Unit *unit);
         bool lookSpecial (int x, int y);
     
 };
