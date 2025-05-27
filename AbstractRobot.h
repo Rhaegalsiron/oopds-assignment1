@@ -8,6 +8,8 @@
 #define TRACKER_BOT 6
 #define SCOUT_BOT 7
 #define BLIND_BOT 8
+#define HAWKING_BOT 9
+#define DIZZY_SHOOTER_BOT 10
 #include <iostream>
 #include "Types.h"
 using namespace std;

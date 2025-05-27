@@ -11,8 +11,8 @@ class Unit
 {
 private:
     AbstractGame *game;
-    vector<int> movementEvolutionOptions = {JUMP_BOT, STEALTH_BOT};
-    vector<int> actionEvolutionOptions = {THIRTY_SHOT_BOT, LONG_SHOT_BOT, SEMI_AUTO_BOT};
+    vector<int> movementEvolutionOptions = {JUMP_BOT, STEALTH_BOT, HAWKING_BOT};
+    vector<int> actionEvolutionOptions = {THIRTY_SHOT_BOT, LONG_SHOT_BOT, SEMI_AUTO_BOT, DIZZY_SHOOTER_BOT};
     vector<int> SeeingEvolutionOptions = {TRACKER_BOT, SCOUT_BOT, BLIND_BOT};
     AbstractRobot *defaultModule;
 
