@@ -143,6 +143,7 @@ void ThinkingRobot::thinkRobot()
                 std::pair<int, int> newCoordinates = randomDirection(x, y, true); // set extened range to true for it can shot range +- 3
                 int newX = newCoordinates.first;
                 int newY = newCoordinates.second;
+                this->unit->fireModule->useAbility(newX, newY);
             }
             else if (this->unit->fireModule != NULL && this->unit->fireModule->robot_type == SEMI_AUTO_BOT)
             {

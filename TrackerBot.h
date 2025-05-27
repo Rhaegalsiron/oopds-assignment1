@@ -17,6 +17,7 @@ private:
 
 public:
     TrackerBot(Unit *unit);
-    bool lookSpecial(int x, int y); // Tracks a robot at the specified position
+    bool useAbility() { return false; };
+    bool useAbility(int x, int y); // Tracks a robot at the specified position
     void revealLocation(); // Reveals the locations of tracked robots
 };

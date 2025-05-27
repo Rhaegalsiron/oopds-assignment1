@@ -8,7 +8,7 @@ TrackerBot::TrackerBot(Unit *unit)
     this->trackerCount = 3; // Initialize tracker count
 }
 
-bool TrackerBot::lookSpecial(int x, int y)
+bool TrackerBot::useAbility(int x, int y)
 {
     if (trackerCount <= 0)
     {

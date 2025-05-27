@@ -8,7 +8,7 @@ ScoutBot::ScoutBot(Unit *unit)
     this->mapVisionCount = 3;
 };
 
-bool ScoutBot::lookSpecial(int x, int y)
+bool ScoutBot::useAbility(int x, int y)
 {
     if (mapVisionCount <= 0)
     {   

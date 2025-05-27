@@ -1,4 +1,8 @@
-#include "dizzyshooterbot.h"
+#include "DizzyShooterBot.h"
+
+DizzyShooterBot::DizzyShooterBot(Unit *unit) {
+    this->unit = unit;
+}
 
 bool DizzyShooterBot::useAbility() {
     if (this->unit->isRespawning) {

@@ -15,6 +15,6 @@ class ScoutBot : public SeeingBot
 
     public: 
         ScoutBot(Unit *unit);
-        bool lookSpecial (int x, int y);
-    
+        bool useAbility(int x, int y);
+        bool useAbility() { return false; };
 };
