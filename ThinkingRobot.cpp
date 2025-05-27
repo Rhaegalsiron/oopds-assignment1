@@ -30,11 +30,11 @@ void ThinkingRobot::thinkRobot()
     }
     int choice = rand() % actionsOrder.size();
     vector<string> actions = actionsOrder[choice];
-    int x = this->unit->currentGrid->x;
-    int y = this->unit->currentGrid->y;
 
     for (const string &action : actions)
-    {
+    {   
+        int x = this->unit->currentGrid->x; //ISSUE FOUND: THE BOT WAS GETTING THE SAME COORDINATES FOR ALL ACTIONS, SO IT WAS NOT MOVING OR LOOKING PROPERLY
+        int y = this->unit->currentGrid->y;
         // MOVE
         if (action == "move")
         {
