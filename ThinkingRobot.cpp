@@ -152,6 +152,8 @@ void ThinkingRobot::thinkRobot()
             };
         }
     }
+
+    
 }
 
 std::pair<int, int> ThinkingRobot::randomDirection(int x, int y, bool forExtendedRange)
