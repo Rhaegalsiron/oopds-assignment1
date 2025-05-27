@@ -1,13 +1,59 @@
 #include "Game.h"
 #include "ThinkingRobot.h"
 
-Game::Game()
+Game::Game(Configuration *config)
 {
-    this->field = new Battlefield();
+
+    this->field = new Battlefield(config->dimensionX, config->dimensionY);
+    this->simulationSteps = config->simulationSteps;
     this->respawnQueue = {};
     this->units = {};
     this->messageLog = {};
     srand(static_cast<unsigned>(time(0)));
+
+    for (
+        int i = 0;
+        i < (config->robotCount < config->robotLists.size()
+                 ? config->robotCount
+                 : config->robotLists.size());
+        i++)
+    {
+        Unit *unit = new Unit(this, config->robotLists[i].name);
+        this->addToGame(unit);
+        if (config->robotLists[i].initialX == RANDOM_POSITION || config->robotLists[i].initialY == RANDOM_POSITION)
+        {
+            this->addToRespawn(unit);
+            this->respawnNext();
+        }
+        if (config->robotLists[i].initialX != RANDOM_POSITION && config->robotLists[i].initialY == RANDOM_POSITION)
+        {
+            while (true)
+            {
+                Grid *grid = this->field->getGrid(config->robotLists[i].initialX, rand() % this->field->map.size());
+                if (grid->occupyingUnit == NULL)
+                {
+                    unit->updatePos(grid->x, grid->y);
+                    break;
+                }
+            }
+        }
+        if (config->robotLists[i].initialX == RANDOM_POSITION && config->robotLists[i].initialY != RANDOM_POSITION)
+        {
+            while (true)
+            {
+                Grid *grid = this->field->getGrid(rand() % this->field->map[0].size(), config->robotLists[i].initialY);
+                if (grid->occupyingUnit == NULL)
+                {
+                    unit->updatePos(grid->x, grid->y);
+                    break;
+                }
+            }
+        }
+        if (config->robotLists[i].initialX != RANDOM_POSITION && config->robotLists[i].initialY != RANDOM_POSITION)
+        {
+            unit->updatePos(config->robotLists[i].initialX, config->robotLists[i].initialY);
+        }
+    }
 };
 
 void Game::addToGame(Unit *unit)
@@ -90,4 +136,24 @@ void Game::endTurn()
 void Game::log(string message)
 {
     this->messageLog.push_back(message);
+}
+
+void Game::runSimulation()
+{
+    this->log("Simulation start...");
+    this->renderBattleField();
+    this->messageLog.clear();
+
+    for (int i = 0; i < this->simulationSteps; i++)
+    {
+        cout << endl
+             << endl;
+        cout << "Step: " << to_string(i + 1) << endl;
+        this->respawnNext();
+        this->executeTurn();
+        this->renderBattleField();
+        this->endTurn();
+    }
+
+    cout << "main executed" << endl;
 }

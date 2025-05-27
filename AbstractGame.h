@@ -4,6 +4,8 @@
 
 class AbstractGame
 {
+protected:
+    int simulationSteps;
 
 public:
     vector<string> messageLog;
@@ -18,4 +20,5 @@ public:
     virtual void executeTurn() = 0;
     virtual void endTurn() = 0;
     virtual void log(string message) = 0;
+    virtual void runSimulation() = 0;
 };

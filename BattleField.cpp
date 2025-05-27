@@ -8,6 +8,11 @@ Grid::Grid(int x, int y)
     this->occupyingUnit = NULL;
 }
 
+Battlefield::Battlefield(int x, int y)
+{
+    this->generateMap(x,y);
+}
+
 void Battlefield::generateMap(int sizeX, int sizeY)
 {
     map.resize(sizeY, vector<Grid *>(sizeX, NULL));
