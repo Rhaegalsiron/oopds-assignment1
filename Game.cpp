@@ -66,6 +66,7 @@ void Game::addToRespawn(Unit *unit)
     unit->isRespawning = true;
     if (unit->livesRemaining == 0)
     {
+        this->permanentlyEliminated.push_back(unit);
         return;
     }
     this->respawnQueue.insert(this->respawnQueue.begin(), unit);
@@ -153,7 +154,57 @@ void Game::runSimulation()
         this->executeTurn();
         this->renderBattleField();
         this->endTurn();
+        if (this->isWinConditionAchieved())
+        {
+            vector<Unit *> winners = this->getActiveUnits();
+            cout << endl
+                 << endl;
+            if (winners.size() < 1)
+            {
+                cout << "The simulation ended with no winners..." << endl;
+            }
+            else
+            {
+                cout << "Last man standing is:" << endl;
+                cout << winners[0]->Name << endl;
+            }
+            break;
+        }
     }
 
-    cout << "main executed" << endl;
+    if (!isWinConditionAchieved())
+    {
+        vector<Unit *> remainingActiveUnits = this->getActiveUnits();
+        cout << endl
+             << endl;
+        cout << "Simulation step limit reached." << endl;
+        cout << "Remaining active units:" << endl;
+        for (int i = 0; i < remainingActiveUnits.size(); i++)
+        {
+            cout << remainingActiveUnits[i]->Name << endl;
+        }
+    }
+}
+
+bool Game::isWinConditionAchieved()
+{
+    return this->units.size() - this->permanentlyEliminated.size() <= 1;
+}
+
+vector<Unit *> Game::getActiveUnits()
+{
+    vector<Unit *> activeUnits;
+    for (int j = 0; j < this->units.size(); j++)
+    {
+        bool isEliminated = false;
+        for (int k = 0; k < this->permanentlyEliminated.size(); k++)
+        {
+            isEliminated = isEliminated || this->units[j] == this->permanentlyEliminated[k];
+        }
+        if (!isEliminated)
+        {
+            activeUnits.push_back(this->units[j]);
+        }
+    }
+    return activeUnits;
 }

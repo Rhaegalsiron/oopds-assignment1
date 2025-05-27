@@ -10,6 +10,7 @@ protected:
 public:
     vector<string> messageLog;
     vector<Unit *> respawnQueue;
+    vector<Unit *> permanentlyEliminated;
     vector<Unit *> units;
     Battlefield *field;
     virtual void addToGame(Unit *unit) = 0;
@@ -21,4 +22,6 @@ public:
     virtual void endTurn() = 0;
     virtual void log(string message) = 0;
     virtual void runSimulation() = 0;
+    virtual bool isWinConditionAchieved() = 0;
+    virtual vector<Unit*> getActiveUnits() = 0;
 };

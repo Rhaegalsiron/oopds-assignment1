@@ -20,4 +20,6 @@ public:
     void endTurn();
     void log(string message);
     void runSimulation();
+    bool isWinConditionAchieved();
+    vector<Unit*> getActiveUnits();
 };

@@ -59,18 +59,18 @@ void ThinkingRobot::thinkRobot()
                 switch (moveIndex)
                 {
                 case 1:
-                    {
+                {
                     std::pair<int, int> newCoordinates = randomDirection(x, y, true); // Set the extended range to true for JUMP_BOT, so it can jump anywhere in the map if the location is not occupied
                     int newX = newCoordinates.first;
                     int newY = newCoordinates.second;
                     this->unit->moveModule->useAbility(newX, newY);
                     break;
-                    }
+                }
                 case 2:
-                    {
+                {
                     this->unit->move(Direction);
                     break;
-                    }
+                }
                 }
             }
             else if (this->unit->moveModule != NULL && this->unit->moveModule->robot_type == HAWKING_BOT) // HawkingBot is a debuff, so it cannot move
@@ -153,24 +153,23 @@ void ThinkingRobot::thinkRobot()
                 this->unit->fireModule->useAbility(newX, newY);
             }
             else if (this->unit->fireModule != NULL && this->unit->fireModule->robot_type == DIZZY_SHOOTER_BOT) // Debuff, so it cannot fire
-            {   
+            {
                 int dizzyIndex = rand() % 2 + 1; // Randomly choose to use ability or not
                 switch (dizzyIndex)
                 {
                 case 1:
-                    {
+                {
                     this->unit->fireModule->useAbility();
                     break;
-                    }
+                }
                 case 2:
-                    {
+                {
                     std::pair<int, int> newCoordinates = randomDirection(x, y, false); // set true for fire for it can shot range +- 1
                     int newX = newCoordinates.first;
                     int newY = newCoordinates.second;
                     this->unit->fire(newX, newY);
-                    }
                 }
-                
+                }
             }
             else
             {
@@ -181,18 +180,18 @@ void ThinkingRobot::thinkRobot()
                 this->unit->log("Firing at coordinates: (" + to_string(newX) + "," + to_string(newY) + ")");
             };
         }
-        if (this->unit->canEvolve)
+    }
+    if (this->unit->canEvolve)
+    {
+        vector<int> evolutionChoices = this->unit->getEvolutionOptions();
+        if (!evolutionChoices.empty())
         {
-            vector<int> evolutionChoices = this->unit->getEvolutionOptions();
-            if (!evolutionChoices.empty())
-            {
-                int evolveIndex = rand() % evolutionChoices.size();
-                this->unit->evolve(evolutionChoices[evolveIndex]);
-            }
-            else
-            {
-                this->unit->log(this->unit->Name + "already has 3 upgrade. It cannot evolve anymore.");
-            }
+            int evolveIndex = rand() % evolutionChoices.size();
+            this->unit->evolve(evolutionChoices[evolveIndex]);
+        }
+        else
+        {
+            this->unit->log(this->unit->Name + "already has 3 upgrade. It cannot evolve anymore.");
         }
     }
 }
