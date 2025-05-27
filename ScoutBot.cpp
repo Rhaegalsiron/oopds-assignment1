@@ -1,14 +1,14 @@
-#include "MapVisionBot.h"
+#include "ScoutBot.h"
 #include <iostream>
 using namespace std;
 
-MapVisionBot::MapVisionBot(Unit *unit)
+ScoutBot::ScoutBot(Unit *unit)
 {
     this->unit = unit;
     this->mapVisionCount = 3;
 };
 
-bool MapVisionBot::lookSpecial(int x, int y)
+bool ScoutBot::lookSpecial(int x, int y)
 {
     if (mapVisionCount <= 0)
     {
