@@ -151,6 +151,18 @@ void ThinkingRobot::thinkRobot()
                 this->unit->log("Firing at coordinates: (" + to_string(newX) + "," + to_string(newY) + ")");
             };
         }
+        if (this->unit->canEvolve){
+            vector<int> evolutionChoices = this->unit->getEvolutionOptions();
+            if (!evolutionChoices.empty())
+            {
+                int evolveIndex = rand() % evolutionChoices.size();
+                this->unit->evolve(evolutionChoices[evolveIndex]);
+            }
+            else if (this->unit->getEvolutionOptions().size() == 0)
+            {
+                this->unit->log(this->unit->Name + "already has 3 upgrade. It cannot evolve anymore.");
+            }
+        }
     }
 
     
