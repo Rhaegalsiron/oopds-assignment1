@@ -5,6 +5,8 @@
 #include "JumpBot.h"
 #include "ThirtyShotBot.h"
 #include "TrackerBot.h"
+#include "ScoutBot.h"
+#include "BlindBot.h"
 
 Unit::Unit(AbstractGame *game, string name)
 {
@@ -230,7 +232,12 @@ void Unit::evolve(int evolutionOption)
         selectedEvolution = "TrackerBot";
         break;
     case SCOUT_BOT:
+        this->seeingModule = new ScoutBot(this);
         selectedEvolution = "ScoutBot";
+        break;
+    case BLIND_BOT:
+        this->seeingModule = new BlindBot(this);
+        selectedEvolution = "BlindBot";
         break;
     }
     this->log( this->Name + " Is evolving into " + selectedEvolution + ".");

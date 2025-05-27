@@ -110,6 +110,10 @@ void ThinkingRobot::thinkRobot()
                     break;
                 }
             }
+            else if (this->unit->seeingModule != NULL && this->unit->seeingModule->robot_type == BLIND_BOT) //debuffs
+            {
+                this->unit->seeingModule->useAbility();
+            }
             else
             {
                 this->unit->look(newX, newY);

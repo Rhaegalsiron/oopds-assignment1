@@ -7,6 +7,7 @@
 #define SEMI_AUTO_BOT 5
 #define TRACKER_BOT 6
 #define SCOUT_BOT 7
+#define BLIND_BOT 8
 #include <iostream>
 #include "Types.h"
 using namespace std;
