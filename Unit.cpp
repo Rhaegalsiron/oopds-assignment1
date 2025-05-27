@@ -3,6 +3,8 @@
 #include "GenericRobot.h"
 #include "ThinkingRobot.h"
 #include "JumpBot.h"
+#include "ThirtyShotBot.h"
+#include "TrackerBot.h"
 
 Unit::Unit(AbstractGame *game, string name)
 {
@@ -210,17 +212,25 @@ void Unit::evolve(int evolutionOption)
         this->moveModule = new JumpBot(this);
         selectedEvolution = "JumpBot";
         break;
-    case STEALTH_BOT: // TODO: Implement the remaining evolution path
+    case STEALTH_BOT:
+        selectedEvolution = "StealthBot";
         break;
     case THIRTY_SHOT_BOT:
+        //this->fireModule = new ThirtyShotBot(this); //needs a virtual function somewhere in the hierarchy to be able to use this
+        selectedEvolution = "ThirtyShotBot";
         break;
     case LONG_SHOT_BOT:
+        selectedEvolution = "LongShotBot";
         break;
     case SEMI_AUTO_BOT:
+        selectedEvolution = "SemiAutoBot";
         break;
     case TRACKER_BOT:
+        this->seeingModule = new TrackerBot(this);
+        selectedEvolution = "TrackerBot";
         break;
     case SCOUT_BOT:
+        selectedEvolution = "ScoutBot";
         break;
     }
     this->log( this->Name + " Is evolving into " + selectedEvolution + ".");

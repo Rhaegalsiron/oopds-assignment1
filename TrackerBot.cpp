@@ -12,15 +12,16 @@ bool TrackerBot::lookSpecial(int x, int y)
 {
     if (trackerCount <= 0)
     {
-        cout << "No more trackers available!" << endl;
+        this->unit->log("No trackers left to use.");
         return false;
     }
 
     // Get the grid at the specified coordinates
     Grid *targetGrid = this->unit->field->getGrid(x, y);
     if (targetGrid == nullptr || targetGrid->occupyingUnit == nullptr)
-    {
-        cout << "No enemy to track at (" << x << ", " << y << ")." << endl;
+    {   
+        this->unit->log("No enemy to track at (" + to_string(x) + ", " + to_string(y) + ").");
+        //cout << "No enemy to track at (" << x << ", " << y << ")." << endl;
         return false;
     }
 
@@ -28,7 +29,8 @@ bool TrackerBot::lookSpecial(int x, int y)
     Unit *targetUnit = targetGrid->occupyingUnit;
     trackedTargets.push_back(targetUnit);
     trackerCount--; // Decrement tracker count
-    cout << "Tracking robot: " << targetUnit->Name << " at (" << x << ", " << y << ")." << endl;
+    this->unit->log("Tracking robot: " + targetUnit->Name + " at (" + to_string(x) + ", " + to_string(y) + ").");
+    //cout << "Tracking robot: " << targetUnit->Name << " at (" << x << ", " << y << ")." << endl;
 
     return true;
 }
@@ -36,8 +38,9 @@ bool TrackerBot::lookSpecial(int x, int y)
 void TrackerBot::revealLocation()
 {
     if (trackedTargets.empty())
-    {
-        cout << "No tracked robots to reveal." << endl;
+    {   
+        this->unit->log("No tracked robots to reveal.");
+        //cout << "No tracked robots to reveal." << endl;
         return;
     }
 
@@ -47,11 +50,13 @@ void TrackerBot::revealLocation()
         {
             int posX = trackedUnit->currentGrid->x;
             int posY = trackedUnit->currentGrid->y;
-            cout << "Robot " << trackedUnit->Name << " revealed at position (" << posX << ", " << posY << ")." << endl;
+            this->unit->log("Robot " + trackedUnit->Name + " revealed at position (" + to_string(posX) + ", " + to_string(posY) + ").");
+            //cout << "Robot " << trackedUnit->Name << " revealed at position (" << posX << ", " << posY << ")." << endl;
         }
         else
-        {
-            cout << "Robot " << trackedUnit->Name << " is no longer on the battlefield." << endl;
+        {   
+            this->unit->log("Robot " + trackedUnit->Name + " is no longer on the battlefield.");
+            //cout << "Robot " << trackedUnit->Name << " is no longer on the battlefield." << endl;
         }
     }
 }
