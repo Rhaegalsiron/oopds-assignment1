@@ -8,7 +8,7 @@
 #include "Evolutions.h"
 #include "Directions.h"
 
-class MapVisionBot : public SeeingBot
+class ScoutBot : public SeeingBot
 {
     private:
         int mapVisionCount;
