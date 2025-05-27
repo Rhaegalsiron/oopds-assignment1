@@ -23,17 +23,18 @@ ThinkingRobot::ThinkingRobot(Unit *unit)
 
 void ThinkingRobot::thinkRobot()
 {
-    if (this->unit->isRespawning)
-    {
-        this->unit->log(this->unit->Name + " is respawning, skipping thinking."); // used the log method for any message that needs to be rendered to make sure that it doesnt mess up the battlefield render.
-        return;
-    }
+
     int choice = rand() % actionsOrder.size();
     vector<string> actions = actionsOrder[choice];
 
     for (const string &action : actions)
-    {   
-        int x = this->unit->currentGrid->x; //ISSUE FOUND: THE BOT WAS GETTING THE SAME COORDINATES FOR ALL ACTIONS, SO IT WAS NOT MOVING OR LOOKING PROPERLY
+    {
+        if (this->unit->isRespawning)
+        {
+            this->unit->log(this->unit->Name + " is respawning, skipping thinking."); // used the log method for any message that needs to be rendered to make sure that it doesnt mess up the battlefield render.
+            return;
+        }
+        int x = this->unit->currentGrid->x; // ISSUE FOUND: THE BOT WAS GETTING THE SAME COORDINATES FOR ALL ACTIONS, SO IT WAS NOT MOVING OR LOOKING PROPERLY
         int y = this->unit->currentGrid->y;
         // MOVE
         if (action == "move")
@@ -114,7 +115,7 @@ void ThinkingRobot::thinkRobot()
                     break;
                 }
             }
-            else if (this->unit->seeingModule != NULL && this->unit->seeingModule->robot_type == BLIND_BOT) //debuffs
+            else if (this->unit->seeingModule != NULL && this->unit->seeingModule->robot_type == BLIND_BOT) // debuffs
             {
                 this->unit->seeingModule->useAbility();
             }
@@ -179,7 +180,8 @@ void ThinkingRobot::thinkRobot()
                 this->unit->log("Firing at coordinates: (" + to_string(newX) + "," + to_string(newY) + ")");
             };
         }
-        if (this->unit->canEvolve){
+        if (this->unit->canEvolve)
+        {
             vector<int> evolutionChoices = this->unit->getEvolutionOptions();
             if (!evolutionChoices.empty())
             {
@@ -192,8 +194,6 @@ void ThinkingRobot::thinkRobot()
             }
         }
     }
-
-    
 }
 
 std::pair<int, int> ThinkingRobot::randomDirection(int x, int y, bool forExtendedRange)
