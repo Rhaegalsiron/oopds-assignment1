@@ -8,6 +8,7 @@
 #include "ScoutBot.h"
 #include "BlindBot.h"
 #include "HawkingBot.h"
+#include "DizzyShooterBot.h"
 
 Unit::Unit(AbstractGame *game, string name)
 {
@@ -241,8 +242,12 @@ void Unit::evolve(int evolutionOption)
         selectedEvolution = "BlindBot";
         break;
     case HAWKING_BOT:
-        this->seeingModule = new HawkingBot(this); //debuff for more
+        this->moveModule = new HawkingBot(this); //debuff for move
         selectedEvolution = "HawkingBot";
+        break;
+    case DIZZY_SHOOTER_BOT:
+        this->fireModule = new DizzyShooterBot(this); //debuff for fire
+        selectedEvolution = "DizzyShooterBot";
         break;
     }
     this->log( this->Name + " Is evolving into " + selectedEvolution + ".");
