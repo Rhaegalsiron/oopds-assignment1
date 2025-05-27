@@ -4,7 +4,7 @@
 #include "ThinkingRobot.h"
 #include "JumpBot.h"
 
-Unit::Unit(AbstractGame *game, string name, int initialX, int initialY)
+Unit::Unit(AbstractGame *game, string name)
 {
     this->Name = name;
     this->game = game;
@@ -15,7 +15,6 @@ Unit::Unit(AbstractGame *game, string name, int initialX, int initialY)
     this->currentGrid = NULL;
     this->isRespawning = false;
     this->reset();
-    this->updatePos(initialX, initialY);
 }
 
 void Unit::turnReset()
@@ -106,6 +105,7 @@ void Unit::afterFiring(Unit *targetUnit, bool isSuccessfulHit, int x, int y)
     {
         this->canEvolve = true;
         this->log(this->Name + " fired at coordinates (" + to_string(x) + "," + to_string(y) + ") and hit " + targetUnit->Name + ".");
+        this->log(targetUnit->Name + " is destroyed.");
     }
 
     if (targetUnit != NULL && !isSuccessfulHit)
@@ -223,13 +223,12 @@ void Unit::evolve(int evolutionOption)
     case SCOUT_BOT:
         break;
     }
-    this->log("Evolving into " + selectedEvolution + ".");
+    this->log( this->Name + " Is evolving into " + selectedEvolution + ".");
     this->canEvolve = false;
 };
 
 void Unit::destroy()
 {
-    this->log(this->Name + " is destroyed.");
     this->livesRemaining--;
     this->reset();
     this->game->addToRespawn(this);
