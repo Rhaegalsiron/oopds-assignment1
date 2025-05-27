@@ -158,7 +158,7 @@ void ThinkingRobot::thinkRobot()
                 int evolveIndex = rand() % evolutionChoices.size();
                 this->unit->evolve(evolutionChoices[evolveIndex]);
             }
-            else if (this->unit->getEvolutionOptions().size() == 0)
+            else
             {
                 this->unit->log(this->unit->Name + "already has 3 upgrade. It cannot evolve anymore.");
             }
