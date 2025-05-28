@@ -130,7 +130,7 @@ void ThinkingRobot::thinkRobot()
         {
             if (detectedRobot)
             { // Starts with checking if the robot is detected
-                fire(targetX, targetY);
+                this->unit->fire(targetX, targetY);
                 this->unit->log("Firing at detected robot at coordinates: (" + to_string(targetX) + "," + to_string(targetY) + ")");
                 detectedRobot = false; // set it back to false after firing
                 targetX = -1;          // set targetX and targetY to -1 after firing
