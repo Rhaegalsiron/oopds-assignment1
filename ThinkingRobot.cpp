@@ -31,7 +31,7 @@ void ThinkingRobot::thinkRobot()
     {
         if (this->unit->isRespawning)
         {
-            this->unit->log(this->unit->Name + " is respawning, skipping thinking."); // used the log method for any message that needs to be rendered to make sure that it doesnt mess up the battlefield render.
+            // this->unit->log(this->unit->Name + " is respawning, skipping thinking."); // used the log method for any message that needs to be rendered to make sure that it doesnt mess up the battlefield render.
             return;
         }
         int x = this->unit->currentGrid->x; // ISSUE FOUND: THE BOT WAS GETTING THE SAME COORDINATES FOR ALL ACTIONS, SO IT WAS NOT MOVING OR LOOKING PROPERLY

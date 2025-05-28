@@ -8,7 +8,8 @@ GenericRobot::GenericRobot(Unit *unit)
 
 bool GenericRobot::move(int x, int y)
 {
-    if (this->unit->isRespawning) {
+    if (this->unit->isRespawning)
+    {
         return false;
     }
 
@@ -38,9 +39,12 @@ bool GenericRobot::move(int x, int y)
 
 bool GenericRobot::fire(int x, int y)
 {
-    if (this->unit->isRespawning) {
+    if (this->unit->isRespawning)
+    {
         return false;
     }
+    x = this->clampToLimit(this->unit->currentGrid->x, x, 1);
+    y = this->clampToLimit(this->unit->currentGrid->y, y, 1);
 
     Grid *targetGrid = this->unit->field->getGrid(x, y);
     if (targetGrid->occupyingUnit != NULL)
@@ -57,7 +61,8 @@ bool GenericRobot::fire(int x, int y)
 
 bool GenericRobot::look(int x, int y)
 {
-    if (this->unit->isRespawning) {
+    if (this->unit->isRespawning)
+    {
         return false;
     }
 
@@ -81,7 +86,7 @@ bool GenericRobot::look(int x, int y)
     {
         y = this->unit->currentGrid->y - 1;
     }
-    
+
     this->unit->seenUnit = this->unit->field->getGrid(x, y)->occupyingUnit;
     return this->unit->seenUnit != NULL;
 }

@@ -18,6 +18,7 @@ public:
     virtual bool move(int x, int y) { return false; };
     virtual bool fire(int x, int y) { return false; };
     virtual bool look(int x, int y) { return false; };
+    int clampToLimit(int currentPos, int targetPos, int limit);
 };
 
 // All special bots have must have a useAbility function that returns true if the ability is used, and false if the ability cannot be used.

@@ -122,7 +122,7 @@ void Unit::afterFiring(Unit *targetUnit, bool isSuccessfulHit, int x, int y)
     this->shellsRemaining--;
     if (this->shellsRemaining == 0)
     {
-        this->log(this->Name + " has emptied its magazine.");
+        this->log(this->Name + " has emptied its magazine and self-destructed.");
         this->destroy();
     }
 }

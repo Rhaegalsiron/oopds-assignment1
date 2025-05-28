@@ -90,7 +90,7 @@ void Game::respawnNext()
             unit->updatePos(randX, randY);
             unit->isRespawning = false;
             this->respawnQueue.pop_back();
-            unit->log(unit->Name + " respawn at coordinates (" + to_string(randX) + "," + to_string(randY) + ")");
+            unit->log(unit->Name + " respawn at coordinates (" + to_string(randX) + "," + to_string(randY) + ") with " + to_string(unit->livesRemaining) + " lives remaining.");
             break;
         }
     }
