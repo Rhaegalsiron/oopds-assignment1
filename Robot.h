@@ -16,18 +16,16 @@ using namespace std;
 
 class Unit;
 
-class AbstractRobot
+class Robot
 {
+private:
+    Unit *unit;
+
 protected:
-    int hitChance;
+    Unit *getUnit();
+    void setUnit(Unit *unit);
+    int clampToLimit(int currentPos, int targetPos, int limit);
 
 public:
-    int robot_type;
-    virtual bool useAbility() = 0;
-    virtual bool useAbility(int x, int y) = 0;
-    virtual bool useAbility(Unit *unit) = 0;
-    virtual void thinkRobot() = 0;
-    virtual bool move(int x, int y) = 0;
-    virtual bool fire(int x, int y) = 0;
-    virtual bool look(int x, int y) = 0;
+    int robot_type; // make sure this is set to the defined constant of your special bot
 };

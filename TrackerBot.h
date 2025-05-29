@@ -1,15 +1,15 @@
 #pragma once
 #include <iostream>
 #include "Types.h"
-#include "AbstractRobot.h"
+#include "Robot.h"
 #include "Unit.h"
 #include "BattleField.h"
 #include "AbstractGame.h"
-#include "Evolutions.h"
+#include "SeeingRobot.h"
 #include "Directions.h"
 
 
-class TrackerBot : public SeeingBot
+class TrackerBot : public SeeingRobot
 {
 private:
     int trackerCount = 3; // Number of tracking attempts available
@@ -20,4 +20,5 @@ public:
     bool useAbility() { return false; };
     bool useAbility(int x, int y); // Tracks a robot at the specified position
     void revealLocation(); // Reveals the locations of tracked robots
+    bool look(int x, int y);
 };

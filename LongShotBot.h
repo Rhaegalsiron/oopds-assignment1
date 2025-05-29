@@ -1,12 +1,13 @@
 #pragma once
-#include "Unit.h"
-#include "Evolutions.h"
+#include "ShootingRobot.h"
 
-class LongShotBot : public ActionBot
+class Unit;
+
+class LongShotBot : public ShootingRobot
 {
-   public:
+public:
         int robot_type = LONG_SHOT_BOT;
         LongShotBot(Unit *unit);
         int shellsRemaining = 10;
-        bool useAbility (int x, int y);
+        bool useAbility(int x, int y);
 };

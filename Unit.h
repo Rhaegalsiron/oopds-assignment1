@@ -3,8 +3,11 @@
 #include <string>
 #include "AbstractGame.h"
 #include "BattleField.h"
-#include "AbstractRobot.h"
-#include "Evolutions.h"
+#include "GenericRobot.h"
+#include "ThinkingRobot.h"
+#include "MovingRobot.h"
+#include "SeeingRobot.h"
+#include "ShootingRobot.h"
 using namespace std;
 
 class Unit
@@ -14,7 +17,7 @@ private:
     vector<int> movementEvolutionOptions = {JUMP_BOT, STEALTH_BOT, HAWKING_BOT};
     vector<int> actionEvolutionOptions = {THIRTY_SHOT_BOT, LONG_SHOT_BOT, SEMI_AUTO_BOT, DIZZY_SHOOTER_BOT};
     vector<int> SeeingEvolutionOptions = {TRACKER_BOT, SCOUT_BOT, BLIND_BOT};
-    AbstractRobot *defaultModule;
+    GenericRobot *defaultModule;
     void destroy();
 
 protected:
@@ -27,10 +30,10 @@ public:
     int livesRemaining;
     Battlefield *field;
     Grid *currentGrid;
-    AbstractRobot *thinkingModule;
-    AbstractRobot *moveModule;
-    AbstractRobot *fireModule;
-    AbstractRobot *seeingModule;
+    ThinkingRobot *thinkingModule;
+    MovingRobot *moveModule;
+    ShootingRobot *fireModule;
+    SeeingRobot *seeingModule;
     Unit *seenUnit;
     bool isRespawning;
     bool isStealthed;

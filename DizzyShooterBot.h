@@ -1,12 +1,14 @@
 #pragma once
-#include "Unit.h"
-#include "Evolutions.h"
+#include "ShootingRobot.h"
 
-class DizzyShooterBot : public ActionBot
+class Unit;
+
+class DizzyShooterBot : public ShootingRobot
 {
     public:
         int robot_type = DIZZY_SHOOTER_BOT;
         DizzyShooterBot(Unit *unit);
         bool useAbility();
-        bool useAbility(int x, int y) { return false; };
+        bool useAbility(int x, int y);
+        bool fire(int x, int y);
 };

@@ -1,12 +1,18 @@
 #pragma once
 #include "Unit.h"
-#include "Evolutions.h"
+#include "SeeingRobot.h"
 
-class BlindBot : public SeeingBot
+class BlindBot : public SeeingRobot
 {
-    public:
-        int robot_type = BLIND_BOT;
-        BlindBot(Unit *unit);
-        bool useAbility();
-        bool useAbility(int x, int y) { return false; }; // its blind so no need value for x and y
+protected:
+    using Robot::clampToLimit;
+    using Robot::getUnit;
+    using Robot::setUnit;
+
+public:
+    int robot_type = BLIND_BOT;
+    BlindBot(Unit *unit);
+    bool useAbility();
+    bool useAbility(int x, int y); // its blind so no need value for x and y
+    bool look(int x, int y);
 };

@@ -1,11 +1,17 @@
-#include "ThirtyShotBot.h"
 #include <iostream>
+#include "ThirtyShotBot.h"
+#include "Unit.h"
 using namespace std;
 
 ThirtyShotBot::ThirtyShotBot(Unit *unit)
 {
-    this->unit = unit;
+    this->setUnit(unit);
     this->magazineSize = 30;
-    this->unit->magazineSize = this->magazineSize;
-    this->unit->shellsRemaining = this->unit->magazineSize;
-};
+    this->getUnit()->magazineSize = this->magazineSize;
+    this->getUnit()->shellsRemaining = this->getUnit()->magazineSize;
+}
+
+bool ThirtyShotBot::useAbility(int x, int y)
+{
+    return this->fire(x, y);
+}

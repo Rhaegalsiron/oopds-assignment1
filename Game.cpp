@@ -119,7 +119,7 @@ void Game::executeTurn()
     for (int i = 0; i < this->units.size(); i++)
     {
         Unit *unit = this->units[i];
-        unit->thinkingModule->thinkRobot();
+        unit->thinkingModule->think();
     }
 }
 

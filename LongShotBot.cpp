@@ -1,27 +1,28 @@
 #include "LongShotBot.h"
+#include "Unit.h"
 
 LongShotBot::LongShotBot(Unit *unit)
 {
-    this->unit = unit;
+    this->setUnit(unit);
 }
 
 
 bool LongShotBot::useAbility(int x, int y)
 {
-    if (this->unit->isRespawning || this->unit->hasFired)
+    if (this->getUnit()->isRespawning || this->getUnit()->hasFired)
     {
         return false;
     }
 
-    x = this->clampToLimit(this->unit->currentGrid->x, x, 3);
-    y = this->clampToLimit(this->unit->currentGrid->y, y, 3);
-    Vector2D clampedCoordinates = this->unit->field->clampToBattlefield(x, y);
+    x = this->clampToLimit(this->getUnit()->currentGrid->x, x, 3);
+    y = this->clampToLimit(this->getUnit()->currentGrid->y, y, 3);
+    Vector2D clampedCoordinates = this->getUnit()->field->clampToBattlefield(x, y);
     x = clampedCoordinates.x;
     y = clampedCoordinates.y;
 
-    Grid *targetGrid = this->unit->field->getGrid(x, y);
+    Grid *targetGrid = this->getUnit()->field->getGrid(x, y);
     Unit *targetUnit = targetGrid->occupyingUnit;
     bool isSuccessfulHit = rand() % 100 < this->hitChance;
-    this->unit->onFiring(targetUnit, isSuccessfulHit, x, y);
+    this->getUnit()->onFiring(targetUnit, isSuccessfulHit, x, y);
     return isSuccessfulHit;
 }

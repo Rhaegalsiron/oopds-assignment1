@@ -1,32 +1,33 @@
-#include "ScoutBot.h"
 #include <iostream>
+#include "ScoutBot.h"
+#include "Unit.h"
 using namespace std;
 
 ScoutBot::ScoutBot(Unit *unit)
 {
-    this->unit = unit;
+    this->setUnit(unit);
     this->mapVisionCount = 3;
 };
 
 bool ScoutBot::useAbility(int x, int y)
-{   
-    if (this->unit->isRespawning)
+{
+    if (this->getUnit()->isRespawning)
     {
         return false;
     }
     if (mapVisionCount <= 0)
-    {   
-        this->unit->log("No map vision uses remaining!");
-        //cout << "No map vision uses remaining!" << endl;
+    {
+        this->getUnit()->log("No map vision uses remaining!");
+        // cout << "No map vision uses remaining!" << endl;
         return false;
     }
 
     // Get the grid at the specified coordinates
-    Grid *targetGrid = this->unit->field->getGrid(x, y);
+    Grid *targetGrid = this->getUnit()->field->getGrid(x, y);
     if (targetGrid == NULL)
-    {   
-        this->unit->log("Invalid grid coordinates");
-        //cout << "Invalid grid coordinates" << endl;
+    {
+        this->getUnit()->log("Invalid grid coordinates");
+        // cout << "Invalid grid coordinates" << endl;
         return false;
     }
 
@@ -34,16 +35,26 @@ bool ScoutBot::useAbility(int x, int y)
     if (targetGrid->occupyingUnit != NULL)
     {
         Unit *targetUnit = targetGrid->occupyingUnit;
-        this->unit->log("Unit found at (" + to_string(x) + "," + to_string(y) + "): " + targetUnit->Name);
-        //cout << "Unit found at (" << x << "," << y << "): " << targetUnit->Name << endl;
+        this->getUnit()->log("Unit found at (" + to_string(x) + "," + to_string(y) + "): " + targetUnit->Name);
+        // cout << "Unit found at (" << x << "," << y << "): " << targetUnit->Name << endl;
     }
     else
-    {   
-        this->unit->log("No unit found at (" + to_string(x) + "," + to_string(y) + ").");
-        //cout << "No unit found at (" << x << "," << y << ")." << endl;
+    {
+        this->getUnit()->log("No unit found at (" + to_string(x) + "," + to_string(y) + ").");
+        // cout << "No unit found at (" << x << "," << y << ")." << endl;
     }
 
     // Lower mapVisionCount after use
     mapVisionCount--;
     return true;
+}
+
+bool ScoutBot::useAbility()
+{
+    return false;
+}
+
+bool ScoutBot::look(int x, int y)
+{
+    return false;
 }

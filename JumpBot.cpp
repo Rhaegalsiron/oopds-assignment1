@@ -1,13 +1,15 @@
 #include "JumpBot.h"
+#include "Unit.h"
 
 JumpBot::JumpBot(Unit *unit)
 {
-    this->unit = unit;
+    this->setUnit(unit);
 }
 
 bool JumpBot::useAbility(int x, int y)
 {
-    if (this->unit->isRespawning) {
+    if (this->getUnit()->isRespawning)
+    {
         return false;
     }
 
@@ -15,13 +17,23 @@ bool JumpBot::useAbility(int x, int y)
     {
         return false;
     }
-    if (this->unit->field->getGrid(x, y)->occupyingUnit != NULL)
+    if (this->getUnit()->field->getGrid(x, y)->occupyingUnit != NULL)
     {
         return false;
     }
-    this->unit->updatePos(x, y);
-    this->unit->hasMoved = true; // set this flag hasMoved to true since the robot has moved.
-    this->unit->log(this->unit->Name + " jumped to coordinates (" + to_string(x) + "," + to_string(y) + ").");
+    this->getUnit()->updatePos(x, y);
+    this->getUnit()->hasMoved = true; // set this flag hasMoved to true since the robot has moved.
+    this->getUnit()->log(this->getUnit()->Name + " jumped to coordinates (" + to_string(x) + "," + to_string(y) + ").");
     this->chargesRemaining--;
     return true;
+}
+
+bool JumpBot::useAbility()
+{
+    return false;
+}
+
+bool JumpBot::move(int x, int y)
+{
+    return false;
 }

@@ -5,11 +5,12 @@
 #include <algorithm> // added this for you 
 #include "BattleField.h"
 #include "AbstractGame.h"
-#include "AbstractRobot.h"
-#include "Unit.h"
-#include "Evolutions.h"
+#include "Robot.h"
+
 #include "Directions.h"
 using namespace std;
+
+class Unit;
 
 class ThinkingRobot : public Robot
 
@@ -21,7 +22,7 @@ public:
     bool hasFired;
     vector<vector<string>> actionsOrder;
 
-    void thinkRobot();
+    void think();
     pair<int, int> randomDirection(int x, int y, bool forExtendedRange);
 
 private:

@@ -1,5 +1,14 @@
 #include "ThinkingRobot.h"
-#include "Evolutions.h"
+#include "StealthBot.h"
+#include "ScoutBot.h"
+#include "TrackerBot.h"
+#include "BlindBot.h"
+#include "LongShotBot.h"
+#include "SemiAutoBot.h"
+#include "DizzyShooterBot.h"
+#include "ShootingRobot.h"
+#include "Unit.h"
+
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
@@ -8,7 +17,7 @@
 ThinkingRobot::ThinkingRobot(Unit *unit)
 {
 
-    this->unit = unit;
+    this->setUnit(unit);
     targetX = -1;
     targetY = -1;
     this->detectedRobot = false;
@@ -21,7 +30,7 @@ ThinkingRobot::ThinkingRobot(Unit *unit)
         {"look", "move", "fire"}};
 }
 
-void ThinkingRobot::thinkRobot()
+void ThinkingRobot::think()
 {
 
     int choice = rand() % actionsOrder.size();
@@ -29,31 +38,32 @@ void ThinkingRobot::thinkRobot()
 
     for (const string &action : actions)
     {
-        if (this->unit->isRespawning)
+        if (this->getUnit()->isRespawning)
         {
-            // this->unit->log(this->unit->Name + " is respawning, skipping thinking."); // used the log method for any message that needs to be rendered to make sure that it doesnt mess up the battlefield render.
+            // this->getUnit()->log(this->getUnit()->Name + " is respawning, skipping thinking."); // used the log method for any message that needs to be rendered to make sure that it doesnt mess up the battlefield render.
             return;
         }
-        int x = this->unit->currentGrid->x; // ISSUE FOUND: THE BOT WAS GETTING THE SAME COORDINATES FOR ALL ACTIONS, SO IT WAS NOT MOVING OR LOOKING PROPERLY
-        int y = this->unit->currentGrid->y;
+        int x = this->getUnit()->currentGrid->x; // ISSUE FOUND: THE BOT WAS GETTING THE SAME COORDINATES FOR ALL ACTIONS, SO IT WAS NOT MOVING OR LOOKING PROPERLY
+        int y = this->getUnit()->currentGrid->y;
         // MOVE
         if (action == "move")
         {
             int Direction = rand() % 9;
-            if (this->unit->moveModule != NULL && this->unit->moveModule->robot_type == STEALTH_BOT)
+            if (this->getUnit()->moveModule != NULL && this->getUnit()->moveModule->robot_type == STEALTH_BOT)
             {
+                StealthBot *module = static_cast<StealthBot *>(this->getUnit()->moveModule);
                 int moveIndex = rand() % 2 + 1;
                 switch (moveIndex)
                 {
                 case 1:
-                    this->unit->moveModule->useAbility();
+                    module->useAbility();
                     break;
                 case 2:
-                    this->unit->move(Direction);
+                    this->getUnit()->move(Direction);
                     break;
                 }
             }
-            else if (this->unit->moveModule != NULL && this->unit->moveModule->robot_type == JUMP_BOT)
+            else if (this->getUnit()->moveModule != NULL && this->getUnit()->moveModule->robot_type == JUMP_BOT)
             {
                 int moveIndex = rand() % 2 + 1;
                 switch (moveIndex)
@@ -63,24 +73,24 @@ void ThinkingRobot::thinkRobot()
                     std::pair<int, int> newCoordinates = randomDirection(x, y, true); // Set the extended range to true for JUMP_BOT, so it can jump anywhere in the map if the location is not occupied
                     int newX = newCoordinates.first;
                     int newY = newCoordinates.second;
-                    this->unit->moveModule->useAbility(newX, newY);
+                    this->getUnit()->moveModule->useAbility(newX, newY);
                     break;
                 }
                 case 2:
                 {
-                    this->unit->move(Direction);
+                    this->getUnit()->move(Direction);
                     break;
                 }
                 }
             }
-            else if (this->unit->moveModule != NULL && this->unit->moveModule->robot_type == HAWKING_BOT) // HawkingBot is a debuff, so it cannot move
+            else if (this->getUnit()->moveModule != NULL && this->getUnit()->moveModule->robot_type == HAWKING_BOT) // HawkingBot is a debuff, so it cannot move
             {
-                this->unit->moveModule->useAbility();
+                this->getUnit()->moveModule->useAbility();
             }
             else
             {
-                this->unit->move(Direction);
-                this->unit->log("Moving in direction: " + directionsAsNameVector[Direction] + " from coordinates: (" + to_string(x) + "," + to_string(y) + ")");
+                this->getUnit()->move(Direction);
+                this->getUnit()->log("Moving in direction: " + directionsAsNameVector[Direction] + " from coordinates: (" + to_string(x) + "," + to_string(y) + ")");
             };
         }
         // LOOK
@@ -89,40 +99,45 @@ void ThinkingRobot::thinkRobot()
             std::pair<int, int> newCoordinates = randomDirection(x, y, false); // set false for extended range, it can ony look range +- 1
             int newX = newCoordinates.first;
             int newY = newCoordinates.second;
-            if (this->unit->seeingModule != NULL && this->unit->seeingModule->robot_type == SCOUT_BOT)
+            if (this->getUnit()->seeingModule != NULL && this->getUnit()->seeingModule->robot_type == SCOUT_BOT)
+            {
+                ScoutBot *module = static_cast<ScoutBot *>(this->getUnit()->seeingModule);
+                int seeIndex = rand() % 2 + 1;
+                switch (seeIndex)
+                {
+                case 1:
+                    module->useAbility();
+                    break;
+                case 2:
+                    this->getUnit()->look(newX, newY);
+                    break;
+                }
+            }
+            else if (this->getUnit()->seeingModule != NULL && this->getUnit()->seeingModule->robot_type == TRACKER_BOT)
             {
                 int seeIndex = rand() % 2 + 1;
                 switch (seeIndex)
                 {
                 case 1:
-                    this->unit->seeingModule->useAbility();
-                    break;
-                case 2:
-                    this->unit->look(newX, newY);
-                    break;
-                }
-            }
-            else if (this->unit->seeingModule != NULL && this->unit->seeingModule->robot_type == TRACKER_BOT)
-            {
-                int seeIndex = rand() % 2 + 1;
-                switch (seeIndex)
                 {
-                case 1:
-                    this->unit->seeingModule->useAbility(newX, newY);
+                    TrackerBot *module = static_cast<TrackerBot *>(this->getUnit()->seeingModule);
+                    module->useAbility(newX, newY);
                     break;
+                }
                 case 2:
-                    this->unit->look(newX, newY);
+                    this->getUnit()->look(newX, newY);
                     break;
                 }
             }
-            else if (this->unit->seeingModule != NULL && this->unit->seeingModule->robot_type == BLIND_BOT) // debuffs
+            else if (this->getUnit()->seeingModule != NULL && this->getUnit()->seeingModule->robot_type == BLIND_BOT) // debuffs
             {
-                this->unit->seeingModule->useAbility();
+                BlindBot *module = static_cast<BlindBot *>(this->getUnit()->seeingModule);
+                module->useAbility();
             }
             else
             {
-                this->unit->look(newX, newY);
-                this->unit->log("Looking at coordinates: (" + to_string(newX) + "," + to_string(newY) + ")");
+                this->getUnit()->look(newX, newY);
+                this->getUnit()->log("Looking at coordinates: (" + to_string(newX) + "," + to_string(newY) + ")");
             }
         }
         // FIRE
@@ -130,36 +145,39 @@ void ThinkingRobot::thinkRobot()
         {
             if (detectedRobot)
             { // Starts with checking if the robot is detected
-                this->unit->fire(targetX, targetY);
-                this->unit->log("Firing at detected robot at coordinates: (" + to_string(targetX) + "," + to_string(targetY) + ")");
+                this->getUnit()->fire(targetX, targetY);
+                this->getUnit()->log("Firing at detected robot at coordinates: (" + to_string(targetX) + "," + to_string(targetY) + ")");
                 detectedRobot = false; // set it back to false after firing
                 targetX = -1;          // set targetX and targetY to -1 after firing
                 targetY = -1;
                 return;
             } // end here after fire, no need to do the rest.
 
-            if (this->unit->fireModule != NULL && this->unit->fireModule->robot_type == LONG_SHOT_BOT)
+            if (this->getUnit()->fireModule != NULL && this->getUnit()->fireModule->robot_type == LONG_SHOT_BOT)
             {
                 std::pair<int, int> newCoordinates = randomDirection(x, y, true); // set extened range to true for it can shot range +- 3
                 int newX = newCoordinates.first;
                 int newY = newCoordinates.second;
-                this->unit->fireModule->useAbility(newX, newY);
+                LongShotBot *module = static_cast<LongShotBot *>(this->getUnit()->fireModule);
+                module->useAbility(newX, newY);
             }
-            else if (this->unit->fireModule != NULL && this->unit->fireModule->robot_type == SEMI_AUTO_BOT)
+            else if (this->getUnit()->fireModule != NULL && this->getUnit()->fireModule->robot_type == SEMI_AUTO_BOT)
             {
                 std::pair<int, int> newCoordinates = randomDirection(x, y, false); // set extened range to false for it cant shot range +- 1
                 int newX = newCoordinates.first;
                 int newY = newCoordinates.second;
-                this->unit->fireModule->useAbility(newX, newY);
+                SemiAutoBot *module = static_cast<SemiAutoBot *>(this->getUnit()->fireModule);
+                module->useAbility(newX, newY);
             }
-            else if (this->unit->fireModule != NULL && this->unit->fireModule->robot_type == DIZZY_SHOOTER_BOT) // Debuff, so it cannot fire
+            else if (this->getUnit()->fireModule != NULL && this->getUnit()->fireModule->robot_type == DIZZY_SHOOTER_BOT) // Debuff, so it cannot fire
             {
                 int dizzyIndex = rand() % 2 + 1; // Randomly choose to use ability or not
                 switch (dizzyIndex)
                 {
                 case 1:
                 {
-                    this->unit->fireModule->useAbility();
+                    DizzyShooterBot *module = static_cast<DizzyShooterBot *>(this->getUnit()->fireModule);
+                    module->useAbility();
                     break;
                 }
                 case 2:
@@ -167,7 +185,7 @@ void ThinkingRobot::thinkRobot()
                     std::pair<int, int> newCoordinates = randomDirection(x, y, false); // set true for fire for it can shot range +- 1
                     int newX = newCoordinates.first;
                     int newY = newCoordinates.second;
-                    this->unit->fire(newX, newY);
+                    this->getUnit()->fire(newX, newY);
                 }
                 }
             }
@@ -176,22 +194,22 @@ void ThinkingRobot::thinkRobot()
                 std::pair<int, int> newCoordinates = randomDirection(x, y, false); // set true for fire for it can shot range +- 1
                 int newX = newCoordinates.first;
                 int newY = newCoordinates.second;
-                this->unit->fire(newX, newY);
-                this->unit->log("Firing at coordinates: (" + to_string(newX) + "," + to_string(newY) + ")");
+                this->getUnit()->fire(newX, newY);
+                this->getUnit()->log("Firing at coordinates: (" + to_string(newX) + "," + to_string(newY) + ")");
             };
         }
     }
-    if (this->unit->canEvolve)
+    if (this->getUnit()->canEvolve)
     {
-        vector<int> evolutionChoices = this->unit->getEvolutionOptions();
+        vector<int> evolutionChoices = this->getUnit()->getEvolutionOptions();
         if (!evolutionChoices.empty())
         {
             int evolveIndex = rand() % evolutionChoices.size();
-            this->unit->evolve(evolutionChoices[evolveIndex]);
+            this->getUnit()->evolve(evolutionChoices[evolveIndex]);
         }
         else
         {
-            this->unit->log(this->unit->Name + "already has 3 upgrade. It cannot evolve anymore.");
+            this->getUnit()->log(this->getUnit()->Name + "already has 3 upgrade. It cannot evolve anymore.");
         }
     }
 }
@@ -224,9 +242,9 @@ std::pair<int, int> ThinkingRobot::randomDirection(int x, int y, bool forExtende
     }
 
     // Loop for the whole map for JUMP_BOT
-    for (int y = 0; y < this->unit->field->map.size(); ++y) // TOFIX: This is not the way to get the map coordinates, just concept for now
+    for (int y = 0; y < this->getUnit()->field->map.size(); ++y) // TOFIX: This is not the way to get the map coordinates, just concept for now
     {
-        for (int x = 0; x < this->unit->field->map[0].size(); ++x) // TOFIX: This is not the way to get the map coordinates, just concept for now
+        for (int x = 0; x < this->getUnit()->field->map[0].size(); ++x) // TOFIX: This is not the way to get the map coordinates, just concept for now
         {
             // Store every position in the map, so JUMP_BOT can jump anywhere
             directionsJumpBot.push_back({x, y});
@@ -236,9 +254,9 @@ std::pair<int, int> ThinkingRobot::randomDirection(int x, int y, bool forExtende
     // Check for valid positions in the directionsLong vector for LONG_SHOT_BOT
     for (const auto &dir : directionsLong)
     {
-        if (this->unit->field->isPosValid(dir.first, dir.second))
+        if (this->getUnit()->field->isPosValid(dir.first, dir.second))
         {
-            Grid *targetGrid = this->unit->field->getGrid(dir.first, dir.second);
+            Grid *targetGrid = this->getUnit()->field->getGrid(dir.first, dir.second);
             if (targetGrid->occupyingUnit != NULL)
             {
                 validLongTargets.push_back(dir); // If the target grid has an occupying unit, add to validLongTargets for LONG_SHOT_BOT
@@ -253,9 +271,9 @@ std::pair<int, int> ThinkingRobot::randomDirection(int x, int y, bool forExtende
     // Check for valid positions in the directions for SEMI_AUTO_BOT and THIRTY_SHOT_BOT
     for (const auto &dir : directions)
     {
-        if (this->unit->field->isPosValid(dir.first, dir.second))
+        if (this->getUnit()->field->isPosValid(dir.first, dir.second))
         {
-            Grid *targetGrid = this->unit->field->getGrid(dir.first, dir.second);
+            Grid *targetGrid = this->getUnit()->field->getGrid(dir.first, dir.second);
             if (targetGrid->occupyingUnit != NULL)
             {
                 validTargets.push_back(dir);
@@ -271,20 +289,20 @@ std::pair<int, int> ThinkingRobot::randomDirection(int x, int y, bool forExtende
     // Check for valid positions in the directions for JUMP_BOT
     for (const auto &dir : directionsJumpBot)
     {
-        Grid *targetGrid = this->unit->field->getGrid(dir.first, dir.second);
-        if (this->unit->field->isPosValid(dir.first, dir.second))
+        Grid *targetGrid = this->getUnit()->field->getGrid(dir.first, dir.second);
+        if (this->getUnit()->field->isPosValid(dir.first, dir.second))
         {
             validJumpDirections.push_back(dir);
         }
     }
 
     std::pair<int, int> chosenDirection;
-    if (forExtendedRange && this->unit->fireModule != NULL && this->unit->fireModule->robot_type == LONG_SHOT_BOT) // If this is long shot bot and its for Fire action, choose from validLongDirections to look or fire
+    if (forExtendedRange && this->getUnit()->fireModule != NULL && this->getUnit()->fireModule->robot_type == LONG_SHOT_BOT) // If this is long shot bot and its for Fire action, choose from validLongDirections to look or fire
     {
         int randomIndex = rand() % validLongDirections.size();
         chosenDirection = validLongDirections[randomIndex];
     }
-    else if (forExtendedRange && this->unit->moveModule != NULL && this->unit->moveModule->robot_type == JUMP_BOT) // if this is JUMP_BOT and its for Move action, choose from validJumpDirections to jump
+    else if (forExtendedRange && this->getUnit()->moveModule != NULL && this->getUnit()->moveModule->robot_type == JUMP_BOT) // if this is JUMP_BOT and its for Move action, choose from validJumpDirections to jump
     {
         int randomIndex = rand() % validJumpDirections.size();
         chosenDirection = validJumpDirections[randomIndex];
@@ -296,7 +314,7 @@ std::pair<int, int> ThinkingRobot::randomDirection(int x, int y, bool forExtende
     }
 
     // This part is to set the targetX and targetY for the fire action, so it can be used later in the fire action.
-    if (this->unit->fireModule != NULL && this->unit->fireModule->robot_type == LONG_SHOT_BOT)
+    if (this->getUnit()->fireModule != NULL && this->getUnit()->fireModule->robot_type == LONG_SHOT_BOT)
     {
         if (std::find(validLongTargets.begin(), validLongTargets.end(), chosenDirection) != validLongTargets.end()) // if the choosen direction is in validLongTargets
         {

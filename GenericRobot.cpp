@@ -1,48 +1,50 @@
 #include "GenericRobot.h"
+#include "Unit.h"
+#include "BattleField.h"
 
 GenericRobot::GenericRobot(Unit *unit)
 {
-    this->unit = unit;
+    this->setUnit(unit);
     this->hitChance = 70;
 }
 
 bool GenericRobot::move(int x, int y)
 {
-    if (this->unit->isRespawning)
+    if (this->getUnit()->isRespawning)
     {
         return false;
     }
 
-    int deltaX = abs(this->unit->currentGrid->x - x);
-    int deltaY = abs(this->unit->currentGrid->y - y);
+    int deltaX = abs(this->getUnit()->currentGrid->x - x);
+    int deltaY = abs(this->getUnit()->currentGrid->y - y);
 
-    if (deltaX > 1 && x > this->unit->currentGrid->x)
+    if (deltaX > 1 && x > this->getUnit()->currentGrid->x)
     {
-        x = this->unit->currentGrid->x + 1;
+        x = this->getUnit()->currentGrid->x + 1;
     }
-    if (deltaX > 1 & x < this->unit->currentGrid->x)
+    if (deltaX > 1 & x < this->getUnit()->currentGrid->x)
     {
-        x = this->unit->currentGrid->x - 1;
-    }
-
-    if (deltaY > 1 && y > this->unit->currentGrid->y)
-    {
-        y = this->unit->currentGrid->y + 1;
-    }
-    if (deltaY > 1 & y < this->unit->currentGrid->y)
-    {
-        y = this->unit->currentGrid->y - 1;
+        x = this->getUnit()->currentGrid->x - 1;
     }
 
-    Vector2D clampedCoordinates = this->unit->field->clampToBattlefield(x, y);
+    if (deltaY > 1 && y > this->getUnit()->currentGrid->y)
+    {
+        y = this->getUnit()->currentGrid->y + 1;
+    }
+    if (deltaY > 1 & y < this->getUnit()->currentGrid->y)
+    {
+        y = this->getUnit()->currentGrid->y - 1;
+    }
+
+    Vector2D clampedCoordinates = this->getUnit()->field->clampToBattlefield(x, y);
     x = clampedCoordinates.x;
     y = clampedCoordinates.y;
 
-    bool isSuccefullyMoved = this->unit->updatePos(x, y);
+    bool isSuccefullyMoved = this->getUnit()->updatePos(x, y);
 
     if (isSuccefullyMoved)
     {
-        this->unit->log(this->unit->Name + " moved to coordinates (" + to_string(x) + "," + to_string(y) + ").");
+        this->getUnit()->log(this->getUnit()->Name + " moved to coordinates (" + to_string(x) + "," + to_string(y) + ").");
     }
 
     return isSuccefullyMoved;
@@ -50,52 +52,62 @@ bool GenericRobot::move(int x, int y)
 
 bool GenericRobot::fire(int x, int y)
 {
-    if (this->unit->isRespawning || this->unit->hasFired)
+    if (this->getUnit()->isRespawning || this->getUnit()->hasFired)
     {
         return false;
     }
 
-    x = this->clampToLimit(this->unit->currentGrid->x, x, 1);
-    y = this->clampToLimit(this->unit->currentGrid->y, y, 1);
-    Vector2D clampedCoordinates = this->unit->field->clampToBattlefield(x, y);
+    x = this->clampToLimit(this->getUnit()->currentGrid->x, x, 1);
+    y = this->clampToLimit(this->getUnit()->currentGrid->y, y, 1);
+    Vector2D clampedCoordinates = this->getUnit()->field->clampToBattlefield(x, y);
     x = clampedCoordinates.x;
     y = clampedCoordinates.y;
 
-    Grid *targetGrid = this->unit->field->getGrid(x, y);
+    Grid *targetGrid = this->getUnit()->field->getGrid(x, y);
     Unit *targetUnit = targetGrid->occupyingUnit;
     bool isSuccessfulHit = rand() % 100 < this->hitChance;
-    this->unit->onFiring(targetUnit, isSuccessfulHit, x, y);
+    this->getUnit()->onFiring(targetUnit, isSuccessfulHit, x, y);
     return isSuccessfulHit;
 }
 
 bool GenericRobot::look(int x, int y)
 {
-    if (this->unit->isRespawning)
+    if (this->getUnit()->isRespawning)
     {
         return false;
     }
 
-    int deltaX = abs(this->unit->currentGrid->x - x);
-    int deltaY = abs(this->unit->currentGrid->y - y);
+    int deltaX = abs(this->getUnit()->currentGrid->x - x);
+    int deltaY = abs(this->getUnit()->currentGrid->y - y);
 
-    if (deltaX > 1 && x > this->unit->currentGrid->x)
+    if (deltaX > 1 && x > this->getUnit()->currentGrid->x)
     {
-        x = this->unit->currentGrid->x + 1;
+        x = this->getUnit()->currentGrid->x + 1;
     }
-    if (deltaX > 1 & x < this->unit->currentGrid->x)
+    if (deltaX > 1 & x < this->getUnit()->currentGrid->x)
     {
-        x = this->unit->currentGrid->x - 1;
-    }
-
-    if (deltaY > 1 && y > this->unit->currentGrid->y)
-    {
-        y = this->unit->currentGrid->y + 1;
-    }
-    if (deltaY > 1 & y < this->unit->currentGrid->y)
-    {
-        y = this->unit->currentGrid->y - 1;
+        x = this->getUnit()->currentGrid->x - 1;
     }
 
-    this->unit->seenUnit = this->unit->field->getGrid(x, y)->occupyingUnit;
-    return this->unit->seenUnit != NULL;
+    if (deltaY > 1 && y > this->getUnit()->currentGrid->y)
+    {
+        y = this->getUnit()->currentGrid->y + 1;
+    }
+    if (deltaY > 1 & y < this->getUnit()->currentGrid->y)
+    {
+        y = this->getUnit()->currentGrid->y - 1;
+    }
+
+    this->getUnit()->seenUnit = this->getUnit()->field->getGrid(x, y)->occupyingUnit;
+    return this->getUnit()->seenUnit != NULL;
+}
+
+bool GenericRobot::useAbility()
+{
+    return false;
+}
+
+bool GenericRobot::useAbility(int x, int y)
+{
+    return false;
 }
