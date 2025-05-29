@@ -9,7 +9,11 @@ ScoutBot::ScoutBot(Unit *unit)
 };
 
 bool ScoutBot::useAbility(int x, int y)
-{
+{   
+    if (this->unit->isRespawning)
+    {
+        return false;
+    }
     if (mapVisionCount <= 0)
     {   
         this->unit->log("No map vision uses remaining!");

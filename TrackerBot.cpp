@@ -10,6 +10,10 @@ TrackerBot::TrackerBot(Unit *unit)
 
 bool TrackerBot::useAbility(int x, int y)
 {   
+    if (this->unit->isRespawning)
+    {
+        return false;
+    }
     revealLocation(); // Reveal locations of previously tracked robots
     if (trackerCount <= 0)
     {
