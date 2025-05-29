@@ -1,8 +1,7 @@
 #pragma once
 #include "Robot.h"
-#include "Ability.h"
 
-class MovingRobot : public virtual Robot, public virtual NoParamAbility, public virtual CoordinateParamAbility
+class MovingRobot : public virtual Robot
 {
 public:
     virtual bool useAbility() = 0;
