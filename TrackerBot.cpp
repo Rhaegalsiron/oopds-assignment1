@@ -19,7 +19,7 @@ bool TrackerBot::useAbility(int x, int y)
 
     // Get the grid at the specified coordinates
     Grid *targetGrid = this->unit->field->getGrid(x, y);
-    if (targetGrid == nullptr || targetGrid->occupyingUnit == nullptr)
+    if (targetGrid == NULL || targetGrid->occupyingUnit == NULL)
     {   
         this->unit->log("No enemy to track at (" + to_string(x) + ", " + to_string(y) + ").");
         //cout << "No enemy to track at (" << x << ", " << y << ")." << endl;
@@ -47,7 +47,7 @@ void TrackerBot::revealLocation()
 
     for (Unit *trackedUnit : trackedTargets)
     {
-        if (trackedUnit->currentGrid != nullptr)
+        if (trackedUnit->currentGrid != NULL)
         {
             int posX = trackedUnit->currentGrid->x;
             int posY = trackedUnit->currentGrid->y;
