@@ -97,7 +97,6 @@ bool Unit::move(int x, int y)
         return true;
     }
     bool successfullyMoved = this->hasMoved = this->defaultModule->move(x, y);
-    this->log(this->Name + " moved to coordinates (" + to_string(x) + "," + to_string(y) + ").");
     return successfullyMoved;
 };
 

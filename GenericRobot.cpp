@@ -34,7 +34,18 @@ bool GenericRobot::move(int x, int y)
         y = this->unit->currentGrid->y - 1;
     }
 
-    return this->unit->updatePos(x, y);
+    Vector2D clampedCoordinates = this->unit->field->clampToBattlefield(x, y);
+    x = clampedCoordinates.x;
+    y = clampedCoordinates.y;
+
+    bool isSuccefullyMoved = this->unit->updatePos(x, y);
+
+    if (isSuccefullyMoved)
+    {
+        this->unit->log(this->unit->Name + " moved to coordinates (" + to_string(x) + "," + to_string(y) + ").");
+    }
+
+    return isSuccefullyMoved;
 }
 
 bool GenericRobot::fire(int x, int y)
