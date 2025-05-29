@@ -15,6 +15,7 @@ private:
     vector<int> actionEvolutionOptions = {THIRTY_SHOT_BOT, LONG_SHOT_BOT, SEMI_AUTO_BOT, DIZZY_SHOOTER_BOT};
     vector<int> SeeingEvolutionOptions = {TRACKER_BOT, SCOUT_BOT, BLIND_BOT};
     AbstractRobot *defaultModule;
+    void destroy();
 
 protected:
     string Type;
@@ -32,6 +33,7 @@ public:
     AbstractRobot *seeingModule;
     Unit *seenUnit;
     bool isRespawning;
+    bool isStealthed;
     bool canEvolve;
     bool hasMoved;
     bool hasFired;
@@ -45,10 +47,11 @@ public:
     bool move(int direction);
     bool move(int x, int y);
     bool fire(int x, int y);
-    void afterFiring(Unit *targetUnit, bool isSuccessfulHit, int x, int y); // call this after using ability of SemiAutoBot/LongShotBot
+    void onFiring(Unit *targetUnit, bool isSuccessfulHit, int x, int y); // call this after using ability of SemiAutoBot/LongShotBot
     Unit *look(int x, int y);
-    void destroy();
     void reset();
     void turnReset();
     void log(string message);
+    bool onHit();
+    void onMagazineEmpty();
 };

@@ -39,24 +39,22 @@ bool GenericRobot::move(int x, int y)
 
 bool GenericRobot::fire(int x, int y)
 {
-    if (this->unit->isRespawning)
+    if (this->unit->isRespawning || this->unit->hasFired)
     {
         return false;
     }
+
     x = this->clampToLimit(this->unit->currentGrid->x, x, 1);
     y = this->clampToLimit(this->unit->currentGrid->y, y, 1);
+    Vector2D clampedCoordinates = this->unit->field->clampToBattlefield(x, y);
+    x = clampedCoordinates.x;
+    y = clampedCoordinates.y;
 
     Grid *targetGrid = this->unit->field->getGrid(x, y);
-    if (targetGrid->occupyingUnit != NULL)
-    {
-        bool successfulHit = rand() % 100 < this->hitChance;
-        if (successfulHit)
-        {
-            targetGrid->occupyingUnit->destroy();
-            return true;
-        }
-    }
-    return false;
+    Unit *targetUnit = targetGrid->occupyingUnit;
+    bool isSuccessfulHit = rand() % 100 < this->hitChance;
+    this->unit->onFiring(targetUnit, isSuccessfulHit, x, y);
+    return isSuccessfulHit;
 }
 
 bool GenericRobot::look(int x, int y)

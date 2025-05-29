@@ -100,49 +100,35 @@ bool Unit::move(int x, int y)
     return successfullyMoved;
 };
 
-void Unit::afterFiring(Unit *targetUnit, bool isSuccessfulHit, int x, int y)
+void Unit::onFiring(Unit *targetUnit, bool isSuccessfulHit, int x, int y)
 {
     if (targetUnit == NULL)
     {
         this->log(this->Name + " fired at coordinates (" + to_string(x) + "," + to_string(y) + ") but nothing was there.");
     }
 
-    if (targetUnit != NULL && isSuccessfulHit)
+    if (targetUnit != NULL)
     {
         this->canEvolve = true;
-        this->log(this->Name + " fired at coordinates (" + to_string(x) + "," + to_string(y) + ") and hit " + targetUnit->Name + ".");
-        this->log(targetUnit->Name + " is destroyed.");
-    }
+        this->log(this->Name + " fired at coordinates (" + to_string(x) + "," + to_string(y) + ") targeting " + targetUnit->Name + ".");
+        isSuccessfulHit = targetUnit->onHit();
 
-    if (targetUnit != NULL && !isSuccessfulHit)
-    {
-        this->log(this->Name + " fired at coordinates (" + to_string(x) + "," + to_string(y) + ") and missed.");
+        if (!isSuccessfulHit){
+            this->log(this->Name + " fired at coordinates (" + to_string(x) + "," + to_string(y) + ") and missed.");
+        }
     }
 
     this->shellsRemaining--;
     if (this->shellsRemaining == 0)
     {
-        this->log(this->Name + " has emptied its magazine and self-destructed.");
-        this->destroy();
+        this->onMagazineEmpty();
     }
 }
 
 bool Unit::fire(int x, int y)
 {
-    Vector2D clampedCoordinates = this->field->clampToBattlefield(x, y);
-    x = clampedCoordinates.x;
-    y = clampedCoordinates.y;
-    Grid *targetGrid = this->field->getGrid(x, y);
-    bool isSuccessfulHit;
-    Unit *targetUnit = targetGrid->occupyingUnit;
-    if (this->hasFired)
-    {
-        return true;
-    }
+    bool isSuccessfulHit = this->defaultModule->fire(x, y);
 
-    isSuccessfulHit = this->defaultModule->fire(x, y);
-
-    this->afterFiring(targetUnit, isSuccessfulHit, x, y);
     return isSuccessfulHit;
 };
 
@@ -220,7 +206,7 @@ void Unit::evolve(int evolutionOption)
         selectedEvolution = "StealthBot";
         break;
     case THIRTY_SHOT_BOT:
-        //this->fireModule = new ThirtyShotBot(this); //needs a virtual function somewhere in the hierarchy to be able to use this
+        // this->fireModule = new ThirtyShotBot(this); //needs a virtual function somewhere in the hierarchy to be able to use this
         selectedEvolution = "ThirtyShotBot";
         break;
     case LONG_SHOT_BOT:
@@ -238,19 +224,19 @@ void Unit::evolve(int evolutionOption)
         selectedEvolution = "ScoutBot";
         break;
     case BLIND_BOT:
-        this->seeingModule = new BlindBot(this); //debuff for look
+        this->seeingModule = new BlindBot(this); // debuff for look
         selectedEvolution = "BlindBot";
         break;
     case HAWKING_BOT:
-        this->moveModule = new HawkingBot(this); //debuff for move
+        this->moveModule = new HawkingBot(this); // debuff for move
         selectedEvolution = "HawkingBot";
         break;
     case DIZZY_SHOOTER_BOT:
-        this->fireModule = new DizzyShooterBot(this); //debuff for fire
+        this->fireModule = new DizzyShooterBot(this); // debuff for fire
         selectedEvolution = "DizzyShooterBot";
         break;
     }
-    this->log( this->Name + " Is evolving into " + selectedEvolution + ".");
+    this->log(this->Name + " Is evolving into " + selectedEvolution + ".");
     this->canEvolve = false;
 };
 
@@ -287,4 +273,24 @@ void Unit::log(string message)
 {
     this->messageLog.push_back(message);
     this->game->log(message);
+}
+
+bool Unit::onHit()
+{
+    if (this->isStealthed)
+    {
+        this->log(this->Name + " is stealthed and dodged the shot.");
+        return false;
+    }
+    this->log(this->Name + " is hit and destroyed.");
+
+    this->destroy();
+    return true;
+}
+
+void Unit::onMagazineEmpty()
+{
+
+    this->log(this->Name + " has emptied its magazine and self-destructed.");
+    this->destroy();
 }
