@@ -19,7 +19,7 @@ bool ScoutBot::useAbility(int x, int y)
 
     // Get the grid at the specified coordinates
     Grid *targetGrid = this->unit->field->getGrid(x, y);
-    if (targetGrid == nullptr)
+    if (targetGrid == NULL)
     {   
         this->unit->log("Invalid grid coordinates");
         //cout << "Invalid grid coordinates" << endl;
@@ -27,7 +27,7 @@ bool ScoutBot::useAbility(int x, int y)
     }
 
     // Check if there is a unit at the target grid
-    if (targetGrid->occupyingUnit != nullptr)
+    if (targetGrid->occupyingUnit != NULL)
     {
         Unit *targetUnit = targetGrid->occupyingUnit;
         this->unit->log("Unit found at (" + to_string(x) + "," + to_string(y) + "): " + targetUnit->Name);
