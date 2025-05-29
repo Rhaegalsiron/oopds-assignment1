@@ -9,6 +9,4 @@ class LongShotBot : public ActionBot
         LongShotBot(Unit *unit);
         int shellsRemaining = 10;
         bool useAbility (int x, int y);
-        void afterFiring(Unit *targetUnit, bool isSuccessfulHit, int x, int y);
-        //returns if another robot was successfully shot
 };

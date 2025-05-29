@@ -16,4 +16,7 @@ private:
 
 public:
     ThirtyShotBot(Unit *unit);
+    bool useAbility(int x, int y) {
+        return this->unit->fire(x, y);
+    }//Override the pure virtual function.
 };
