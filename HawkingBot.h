@@ -2,7 +2,7 @@
 #include "Unit.h"
 #include "Evolutions.h"
 
-class HawkingBot : public SeeingBot
+class HawkingBot : public MoveBot
 {
     public:
         int robot_type = BLIND_BOT;
