@@ -9,7 +9,8 @@ TrackerBot::TrackerBot(Unit *unit)
 }
 
 bool TrackerBot::useAbility(int x, int y)
-{
+{   
+    revealLocation(); // Reveal locations of previously tracked robots
     if (trackerCount <= 0)
     {
         this->unit->log("No trackers left to use.");
