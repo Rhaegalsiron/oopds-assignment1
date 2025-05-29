@@ -29,6 +29,7 @@ void Unit::turnReset()
     this->hasFired = false;
     this->hasLooked = false;
     this->seenUnit = NULL;
+    this->isStealthed = false;
     this->messageLog.clear();
 }
 
