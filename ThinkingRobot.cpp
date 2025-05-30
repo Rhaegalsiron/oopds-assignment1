@@ -137,7 +137,6 @@ void ThinkingRobot::think()
             else
             {
                 this->getUnit()->look(newX, newY);
-                this->getUnit()->log("Looking at coordinates: (" + to_string(newX) + "," + to_string(newY) + ")");
             }
         }
         // FIRE
@@ -195,7 +194,6 @@ void ThinkingRobot::think()
                 int newX = newCoordinates.first;
                 int newY = newCoordinates.second;
                 this->getUnit()->fire(newX, newY);
-                this->getUnit()->log("Firing at coordinates: (" + to_string(newX) + "," + to_string(newY) + ")");
             };
         }
     }
