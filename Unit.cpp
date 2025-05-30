@@ -2,13 +2,16 @@
 #include "Directions.h"
 #include "GenericRobot.h"
 #include "ThinkingRobot.h"
+#include "StealthBot.h"
 #include "JumpBot.h"
+#include "HawkingBot.h"
 #include "ThirtyShotBot.h"
+#include "LongShotBot.h"
+#include "SemiAutoBot.h"
+#include "DizzyShooterBot.h"
 #include "TrackerBot.h"
 #include "ScoutBot.h"
 #include "BlindBot.h"
-#include "HawkingBot.h"
-#include "DizzyShooterBot.h"
 
 Unit::Unit(AbstractGame *game, string name)
 {
@@ -113,7 +116,8 @@ void Unit::onFiring(Unit *targetUnit, bool isSuccessfulHit, int x, int y)
         this->log(this->Name + " fired at coordinates (" + to_string(x) + "," + to_string(y) + ") targeting " + targetUnit->Name + ".");
         isSuccessfulHit = targetUnit->onHit();
 
-        if (!isSuccessfulHit){
+        if (!isSuccessfulHit)
+        {
             this->log(this->Name + " fired at coordinates (" + to_string(x) + "," + to_string(y) + ") and missed.");
         }
     }
@@ -195,7 +199,7 @@ void Unit::evolve(int evolutionOption)
     {
         return;
     }
-    string selectedEvolution;
+    string selectedEvolution = "";
     switch (evolutionOption)
     {
     case JUMP_BOT:
@@ -203,16 +207,19 @@ void Unit::evolve(int evolutionOption)
         selectedEvolution = "JumpBot";
         break;
     case STEALTH_BOT:
+        this->moveModule = new StealthBot(this);
         selectedEvolution = "StealthBot";
         break;
     case THIRTY_SHOT_BOT:
-        // this->fireModule = new ThirtyShotBot(this); //needs a virtual function somewhere in the hierarchy to be able to use this
+        this->fireModule = new ThirtyShotBot(this); // needs a virtual function somewhere in the hierarchy to be able to use this
         selectedEvolution = "ThirtyShotBot";
         break;
     case LONG_SHOT_BOT:
+        this->fireModule = new LongShotBot(this);
         selectedEvolution = "LongShotBot";
         break;
     case SEMI_AUTO_BOT:
+        this->fireModule = new SemiAutoBot(this);
         selectedEvolution = "SemiAutoBot";
         break;
     case TRACKER_BOT:
@@ -293,4 +300,26 @@ void Unit::onMagazineEmpty()
 
     this->log(this->Name + " has emptied its magazine and self-destructed.");
     this->destroy();
+}
+
+void Unit::renderStatusMessage()
+{
+    string fireModuleType = "None";
+    string moveModuleType = "None";
+    string seeingModuleType = "None";
+    if (this->fireModule != NULL)
+    {
+        fireModuleType = getRobotName(this->fireModule->robot_type);
+    }
+    if (this->moveModule != NULL)
+    {
+        moveModuleType = getRobotName(this->moveModule->robot_type);
+    }
+    if (this->seeingModule != NULL)
+    {
+        seeingModuleType = getRobotName(this->seeingModule->robot_type);
+    }
+
+    this->log("[Status] " + this->Name + " | Lives: " + to_string(this->livesRemaining) + " | Shells: " + to_string(this->shellsRemaining));
+    this->log("[Upgrades] Fire Module: " + fireModuleType + " | Move Module: " + moveModuleType + " | Seeing Module: " + seeingModuleType);
 }

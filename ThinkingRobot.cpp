@@ -212,25 +212,6 @@ void ThinkingRobot::think()
             this->getUnit()->log(this->getUnit()->Name + "already has 3 upgrade. It cannot evolve anymore.");
         }
     }
-    string statusName = this->getUnit()->Name;
-    int statusLives = this->getUnit()->livesRemaining;
-    int statusShells = this->getUnit()->shellsRemaining;
-    vector<string> robotNames = {"Generic Robot", "Jump Bot", "Stealth Bot", "Thirty Shot Bot", "Long Shot Bot", "Semi Auto Bot", "Tracker Bot", "Scout Bot", "Blind Bot", "Hawking Bot", "Dizzy Shooter Bot"};
-    string fireModuleType = "None"; string moveModuleType = "None"; string seeingModuleType = "None";
-    if (this->getUnit()->fireModule != NULL)
-    {
-        fireModuleType = robotNames[this->getUnit()->fireModule->robot_type];
-    } 
-    if (this->getUnit()->moveModule != NULL)
-    {
-        moveModuleType = robotNames[this->getUnit()->moveModule->robot_type];
-    }
-    if (this->getUnit()->seeingModule != NULL)
-    {
-        seeingModuleType = robotNames[this->getUnit()->seeingModule->robot_type];
-    }
-    this->getUnit()->log("[Status] " + statusName + " | Lives: " + to_string(statusLives) + " | Shells: " + to_string(statusShells));
-    this->getUnit()->log("[Upgrades] Fire Module: " + fireModuleType + " | Move Module: " + moveModuleType + " | Seeing Module: " + seeingModuleType);
 }
 
 std::pair<int, int> ThinkingRobot::randomDirection(int x, int y, bool forExtendedRange)

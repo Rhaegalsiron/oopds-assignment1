@@ -9,7 +9,6 @@ class Unit;
 class GenericRobot : public MovingRobot, public virtual ShootingRobot, public virtual SeeingRobot
 {
 public:
-    int robot_type = GENERIC_ROBOT;
     GenericRobot(Unit *unit);
     bool useAbility();
     bool useAbility(int x, int y);

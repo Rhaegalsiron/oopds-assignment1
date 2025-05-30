@@ -17,7 +17,6 @@ private:
 
 public:
     ScoutBot(Unit *unit);
-    int robot_type = SCOUT_BOT;
     bool useAbility(int x, int y);
     bool useAbility();
     bool look(int x, int y);

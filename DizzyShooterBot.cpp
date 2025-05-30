@@ -3,6 +3,7 @@
 
 DizzyShooterBot::DizzyShooterBot(Unit *unit)
 {
+    this->robot_type = DIZZY_SHOOTER_BOT;
     this->setUnit(unit);
 }
 

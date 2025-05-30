@@ -4,6 +4,7 @@ using namespace std;
 
 TrackerBot::TrackerBot(Unit *unit)
 {
+    this->robot_type = TRACKER_BOT;
     this->setUnit(unit);
     this->trackerCount = 3; // Initialize tracker count
 }

@@ -3,6 +3,7 @@
 
 JumpBot::JumpBot(Unit *unit)
 {
+    this->robot_type = JUMP_BOT;
     this->setUnit(unit);
 }
 

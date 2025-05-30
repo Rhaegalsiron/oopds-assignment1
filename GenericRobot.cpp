@@ -4,6 +4,7 @@
 
 GenericRobot::GenericRobot(Unit *unit)
 {
+    this->robot_type = GENERIC_ROBOT;
     this->setUnit(unit);
     this->hitChance = 70;
 }

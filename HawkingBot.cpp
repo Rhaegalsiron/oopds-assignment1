@@ -3,6 +3,7 @@
 
 HawkingBot::HawkingBot(Unit *unit)
 {
+    this->robot_type = HAWKING_BOT;
     this->setUnit(unit);
 }
 

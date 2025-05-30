@@ -57,4 +57,5 @@ public:
     void log(string message);
     bool onHit();
     void onMagazineEmpty();
+    void renderStatusMessage();
 };

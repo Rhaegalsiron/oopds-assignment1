@@ -2,6 +2,7 @@
 
 SemiAutoBot::SemiAutoBot(Unit *unit)
 {
+    this->robot_type = SEMI_AUTO_BOT;
     this->setUnit(unit);
     int hitChance = 70;
 }
@@ -35,6 +36,11 @@ bool SemiAutoBot::useAbility(int x, int y)
     this->getUnit()->shellsRemaining -= maxBurstSize - 1; // To account for the extra shots taken.
     this->getUnit()->onFiring(targetUnit, isSuccessfulHit, x, y);
     return isSuccessfulHit;
+}
+
+bool SemiAutoBot::useAbility()
+{
+    return false;
 }
 
 bool SemiAutoBot::fire(int x, int y)

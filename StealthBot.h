@@ -6,7 +6,6 @@ class Unit;
 class StealthBot : public MovingRobot
 {
     public:
-        int robot_type = STEALTH_BOT;
         StealthBot(Unit *unit);
         int hideCount = 3; // hide charges per match
         bool useAbility();

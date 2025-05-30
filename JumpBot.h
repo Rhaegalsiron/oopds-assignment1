@@ -6,7 +6,6 @@ class Unit;
 class JumpBot : public MovingRobot
 {
 public:
-    int robot_type = JUMP_BOT;
     JumpBot(Unit *unit);
     int chargesRemaining = 3;
     bool useAbility(); // since JumpBot ability requires a coordinate

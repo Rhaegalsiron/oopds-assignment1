@@ -5,6 +5,7 @@ using namespace std;
 
 ScoutBot::ScoutBot(Unit *unit)
 {
+    this->robot_type = SCOUT_BOT;
     this->setUnit(unit);
     this->mapVisionCount = 3;
 };

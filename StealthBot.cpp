@@ -3,6 +3,7 @@
 
 StealthBot::StealthBot(Unit *unit)
 {
+    this->robot_type = STEALTH_BOT;
     this->setUnit(unit);
 }
 

@@ -10,7 +10,6 @@ protected:
     using Robot::setUnit;
 
 public:
-    int robot_type = BLIND_BOT;
     BlindBot(Unit *unit);
     bool useAbility();
     bool useAbility(int x, int y); // its blind so no need value for x and y

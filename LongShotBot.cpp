@@ -3,9 +3,9 @@
 
 LongShotBot::LongShotBot(Unit *unit)
 {
+    this->robot_type = LONG_SHOT_BOT;
     this->setUnit(unit);
 }
-
 
 bool LongShotBot::useAbility(int x, int y)
 {
@@ -25,4 +25,14 @@ bool LongShotBot::useAbility(int x, int y)
     bool isSuccessfulHit = rand() % 100 < this->hitChance;
     this->getUnit()->onFiring(targetUnit, isSuccessfulHit, x, y);
     return isSuccessfulHit;
+}
+
+bool LongShotBot::useAbility()
+{
+    return false;
+}
+
+bool LongShotBot::fire(int x, int y)
+{
+    return false;
 }

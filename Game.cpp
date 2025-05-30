@@ -120,6 +120,7 @@ void Game::executeTurn()
     {
         Unit *unit = this->units[i];
         unit->thinkingModule->think();
+        unit->renderStatusMessage();
     }
 }
 

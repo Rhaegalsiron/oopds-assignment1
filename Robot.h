@@ -11,8 +11,11 @@
 #define HAWKING_BOT 9
 #define DIZZY_SHOOTER_BOT 10
 #include <iostream>
+#include <vector>
 #include "Types.h"
 using namespace std;
+
+string getRobotName(int robot_type);
 
 class Unit;
 

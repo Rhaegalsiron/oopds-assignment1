@@ -2,6 +2,7 @@
 
 BlindBot::BlindBot(Unit *unit)
 {
+    this->robot_type = BLIND_BOT;
     this->setUnit(unit);
 }
 
