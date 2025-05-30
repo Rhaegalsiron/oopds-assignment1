@@ -145,10 +145,23 @@ void ThinkingRobot::think()
             if (detectedRobot)
             { // Starts with checking if the robot is detected
                 this->getUnit()->fire(targetX, targetY);
-                this->getUnit()->log("Firing at detected robot at coordinates: (" + to_string(targetX) + "," + to_string(targetY) + ")");
+                //this->getUnit()->log("Firing at detected robot at coordinates: (" + to_string(targetX) + "," + to_string(targetY) + ")");
                 detectedRobot = false; // set it back to false after firing
                 targetX = -1;          // set targetX and targetY to -1 after firing
                 targetY = -1;
+                if (this->getUnit()->canEvolve)
+                    {
+                        vector<int> evolutionChoices = this->getUnit()->getEvolutionOptions();
+                        if (!evolutionChoices.empty())
+                        {
+                            int evolveIndex = rand() % evolutionChoices.size();
+                            this->getUnit()->evolve(evolutionChoices[evolveIndex]);
+                        }
+                        else
+                        {
+                            this->getUnit()->log(this->getUnit()->Name + "already has 3 upgrade. It cannot evolve anymore.");
+                        }
+                }
                 return;
             } // end here after fire, no need to do the rest.
 
