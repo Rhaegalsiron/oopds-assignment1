@@ -1,5 +1,6 @@
 #include "Game.h"
 #include "ThinkingRobot.h"
+#include <limits>
 
 Game::Game(Configuration *config)
 {
@@ -155,6 +156,8 @@ void Game::runSimulation()
         this->executeTurn();
         this->renderBattleField();
         this->endTurn();
+        cout << "Press Enter to continue...";
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         if (this->isWinConditionAchieved())
         {
             vector<Unit *> winners = this->getActiveUnits();
