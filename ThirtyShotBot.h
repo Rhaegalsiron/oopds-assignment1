@@ -16,5 +16,6 @@ private:
 
 public:
     ThirtyShotBot(Unit *unit);
+    int robot_type = THIRTY_SHOT_BOT;
     bool useAbility(int x, int y); // Override the pure virtual function.
 };
