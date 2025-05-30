@@ -39,7 +39,7 @@ void Unit::reset()
     this->moveModule = NULL;
     this->fireModule = NULL;
     this->seeingModule = NULL;
-    this->magazineSize = 20;
+    this->magazineSize = 10;
     this->shellsRemaining = this->magazineSize;
     if (this->currentGrid != NULL)
     {
