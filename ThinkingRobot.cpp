@@ -212,6 +212,10 @@ void ThinkingRobot::think()
             this->getUnit()->log(this->getUnit()->Name + "already has 3 upgrade. It cannot evolve anymore.");
         }
     }
+    string statusName = this->getUnit()->Name;
+    int statusLives = this->getUnit()->livesRemaining;
+    int statusShells = this->getUnit()->shellsRemaining;
+    this->getUnit()->log("[Status] " + statusName + " | Lives: " + to_string(statusLives) + " | Shells: " + to_string(statusShells) +"\n");
 }
 
 std::pair<int, int> ThinkingRobot::randomDirection(int x, int y, bool forExtendedRange)
