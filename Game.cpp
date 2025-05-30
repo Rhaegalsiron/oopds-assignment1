@@ -1,10 +1,13 @@
 #include "Game.h"
 #include "ThinkingRobot.h"
 #include <limits>
+#include <chrono>
 
-Game::Game(Configuration *config)
+using namespace std::chrono;
+
+Game::Game(Configuration *config) : LogFile(to_string(system_clock::now().time_since_epoch().count()) + "_LogFile.txt") // I honestly don't know how or why this works, but StackOverflow said it works and it works.
 {
-
+    int timestamp = system_clock::now().time_since_epoch().count();
     this->field = new Battlefield(config->dimensionX, config->dimensionY);
     this->simulationSteps = config->simulationSteps;
     this->respawnQueue = {};
@@ -57,6 +60,11 @@ Game::Game(Configuration *config)
     }
 };
 
+Game::~Game()
+{
+    this->LogFile.close();
+}
+
 void Game::addToGame(Unit *unit)
 {
     this->units.push_back(unit);
@@ -108,10 +116,16 @@ void Game::respawnAll()
 
 void Game::renderBattleField()
 {
-    this->field->displayMap();
+    vector<string> mapMessage = this->field->displayMap();
+    for (int i = 0; i < mapMessage.size(); i++)
+    {
+        cout << mapMessage[i] << endl;
+        this->writeToFile(mapMessage[i]);
+    }
     for (int i = 0; i < this->messageLog.size(); i++)
     {
         cout << this->messageLog[i] << endl;
+        this->writeToFile(this->messageLog[i]);
     }
 }
 
@@ -152,6 +166,9 @@ void Game::runSimulation()
         cout << endl
              << endl;
         cout << "Step: " << to_string(i + 1) << endl;
+        this->writeToFile("");
+        this->writeToFile("");
+        this->writeToFile("Step: " + to_string(i + 1));
         this->respawnNext();
         this->executeTurn();
         this->renderBattleField();
@@ -163,14 +180,19 @@ void Game::runSimulation()
             vector<Unit *> winners = this->getActiveUnits();
             cout << endl
                  << endl;
+            this->writeToFile("");
+            this->writeToFile("");
             if (winners.size() < 1)
             {
                 cout << "The simulation ended with no winners..." << endl;
+                this->writeToFile("The simulation ended with no winners...");
             }
             else
             {
                 cout << "Last man standing is:" << endl;
                 cout << winners[0]->Name << endl;
+                this->writeToFile("Last man standing is:");
+                this->writeToFile(winners[0]->Name);
             }
             break;
         }
@@ -183,9 +205,14 @@ void Game::runSimulation()
              << endl;
         cout << "Simulation step limit reached." << endl;
         cout << "Remaining active units:" << endl;
+        this->writeToFile("");
+        this->writeToFile("");
+        this->writeToFile("Simulation step limit reached.");
+        this->writeToFile("Remaining active units:");
         for (int i = 0; i < remainingActiveUnits.size(); i++)
         {
             cout << remainingActiveUnits[i]->Name << endl;
+            this->writeToFile(remainingActiveUnits[i]->Name);
         }
     }
 }
@@ -211,4 +238,9 @@ vector<Unit *> Game::getActiveUnits()
         }
     }
     return activeUnits;
+}
+
+void Game::writeToFile(string message)
+{
+    this->LogFile << message << endl;
 }

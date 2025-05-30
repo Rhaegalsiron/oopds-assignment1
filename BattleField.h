@@ -25,9 +25,10 @@ public:
     Battlefield(int x, int y);
     vector<vector<Grid *>> map; // 2d vector array
 
-    void displayMap();
+    vector<string> displayMap();
     Grid *getGrid(int x, int y);
     bool isPosValid(int x, int y);
-    void unitCounter();
+    int unitCounter();
     Vector2D clampToBattlefield(int x, int y);
+
 };

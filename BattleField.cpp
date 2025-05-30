@@ -10,7 +10,7 @@ Grid::Grid(int x, int y)
 
 Battlefield::Battlefield(int x, int y)
 {
-    this->generateMap(x,y);
+    this->generateMap(x, y);
 }
 
 void Battlefield::generateMap(int sizeX, int sizeY)
@@ -30,7 +30,7 @@ Grid *Battlefield::getGrid(int x, int y)
     return this->map[y][x];
 };
 
-void Battlefield::unitCounter()
+int Battlefield::unitCounter()
 {
     int unitCount = 0;
     for (int y = 0; y < map.size(); y++)
@@ -44,29 +44,32 @@ void Battlefield::unitCounter()
             }
         }
     }
-    cout << "Robots: " << unitCount << endl;
+    return unitCount;
 }
 
-void Battlefield::displayMap()
+vector<string> Battlefield::displayMap()
 {
-    cout << "M by N: " << this->map.size() << "X" << this->map[0].size() << endl;
-    unitCounter();
+    vector<string> message;
+
+    message.push_back("M by N: " + to_string(this->map.size()) + "X" + to_string(this->map[0].size()));
+    message.push_back("Robots: " + to_string(unitCounter()));
     for (int y = 0; y < map.size(); y++)
     {
+        string currentLine = "";
         for (int x = 0; x < map[0].size(); x++)
         {
             Grid *currentGrid = this->getGrid(x, y);
             if (currentGrid->occupyingUnit != NULL)
             {
-                cout << currentGrid->occupyingUnit->Name[0] << " ";
+                currentLine += currentGrid->occupyingUnit->Name.substr(0, 1) + " ";
             }
             else
-                cout << "*" << " ";
+                currentLine += "* ";
             currentGrid = NULL;
         }
-        cout << endl;
+        message.push_back(currentLine);
     }
-    cout << "\n";
+    return message;
 };
 
 bool Battlefield::isPosValid(int x, int y) // This for restricting the movement when the Robot touches the end of the battlefield range
