@@ -1,5 +1,5 @@
 /**********|**********|**********|
-Program: YOUR_FILENAME.cpp / YOUR_FILENAME.h
+Program: AbstractGame.h
 Course: OOPDS
 Trimester: 2410
 Name: HERBERT PILO ANAK BITA / LOH YONG SHENG / MING SU ANN / HEW WEE BO
